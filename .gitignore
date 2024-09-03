@@ -1,0 +1,7 @@
+# virtual environments
+.venv/
+
+# quarto output
+_site/
+
+/.quarto/
