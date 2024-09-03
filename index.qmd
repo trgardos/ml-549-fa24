@@ -248,6 +248,7 @@ partners and are complex enough to provide students with real-world ML experienc
 Projects will be graded based on a combination of overall project outcome and
 individual contributions.
 
+```{=html}
 <table>
 	<tbody>
 		<tr>
@@ -299,6 +300,7 @@ individual contributions.
 		</tr>
 	</tbody>
 </table>
+```
 
 ## Community of Learning: Class and University Policies 
 
