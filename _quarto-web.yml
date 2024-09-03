@@ -17,7 +17,7 @@ website:
     search: true
     contents:
       - href: index.qmd
-        text: Home
+        text: Home -- Syllabus
       - href: schedule.qmd
       - section: "Assignments"
         contents:

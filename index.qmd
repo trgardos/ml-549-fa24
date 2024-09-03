@@ -13,6 +13,10 @@ for real world challenges.
 
 ---
 
+Welcome to the Spark! Machine Learning Practicum! On this page you'll find the
+course syllabus and elsewhere on this site you'll find the course schedule and
+select lectures and assignments.
+
 ## Logistics 
 
 **Time/Location:** Tue/Thu 2:00pm–3:15pm, Spring 2024<br>
@@ -24,7 +28,8 @@ for real world challenges.
 **Instructor:**
 
 - Thomas Gardos ( tgardos@bu.edu) 
-- Office hours:  Thursdays, 3:30-4:30 CDS 1623 and by appointment
+- Office hours:  Thursdays, 3:30-4:30 and by appointment
+- Location: CDS 1623
 
 Project Managers and TE:
 

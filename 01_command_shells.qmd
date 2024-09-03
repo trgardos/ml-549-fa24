@@ -2,7 +2,12 @@
 title: "Command Shells"
 ---
 
-# Introduction
+# Overview
+
+This is an overview and short tutorial on command shells followed by
+an [exercise](#exercise-command-shell-scavenger-hunt) to test your skills.
+
+## Introduction
 
 Although there are a lot of great GUI-based machine learning applications, there
 are many cases when it is more productive to use command line interfaces, for
