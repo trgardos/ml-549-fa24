@@ -12,6 +12,7 @@ execute:
 website:
   title: "CS/DS 549 Spark! Machine Learning Practicum"
   back-to-top-navigation: true
+  favicon: "assets/images/spark-logo.png"
   sidebar:
     style: "docked"
     search: true
