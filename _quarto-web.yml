@@ -13,6 +13,16 @@ website:
   title: "CS/DS 549 Spark! Machine Learning Practicum"
   back-to-top-navigation: true
   favicon: "assets/images/spark-logo.png"
+  page-footer: "CS/DS 549 Spark! Machine Learning Practicum"
+  navbar:
+    background: "primary"
+    tools:
+    - icon: github
+      menu: 
+      - text: Source Code
+        href: https://github.com/trgardos/ml-549-fa24
+      - text: Report a Bug
+        href: https://github.com/trgardos/ml-549-fa24/issues
   sidebar:
     style: "docked"
     search: true
@@ -31,6 +41,3 @@ format:
     css: styles.css
     toc: true
     code-fold: false
-
-
-
