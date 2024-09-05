@@ -7,6 +7,13 @@ title: "Python Virtual Environments and Package Management"
 The next useful topic that you will need to know is how to manage Python
 virtual environments and manage package dependencies.
 
+::: {.callout-important}
+We also include an [exercise](#exercise) at the end of this document. Read
+through and complete the exercise.
+:::
+
+**We suggest that you follow along in a command shell on your local machine.**
+
 We're going to build upon our [Command Shells](01_command_shells.qmd) skills
 to install Python and manage virtual environments.
 
@@ -553,8 +560,192 @@ Always use `python -m pip` instead of just `pip` to ensure you're using the corr
 ## A word on package caching
 
 Note that `pip` and `conda` will cache packages, often in your home directory.
-This could be a problem because, for exeample, different versions if the same
-program can be cached where you limite resources.
+This could be a problem because, for exeample, many versions of the same 
+package can be cached and use up disk space. This can be especially problematic
+on SCC where you're home directory is quite limited in size. We'll talk about
+that when we cover SCC.
+
+# Exercise
+
+## Exercise Introduction
+
+Let's put what we've learned into practice. For this exercise, you'll need to
+create a new virtual environment and install pytorch and related packages into
+the environment. You'll save a snapshot of your environmenat as well.
+Then you'll need to copy the python script from below into a file in your working
+directory. Run the script to train and evaluate the model. The script is a simple
+CNN for classifying CIFAR-10 images. It also writes out the trained model to a file.
+You'll then need to upload your trained model file to Gradescope. You'll also
+need to upload your `environment.yml` or `requirements.txt` file.
+
+## Exercise Instructions
+
+1. Create a directory for your exercise and cd into it.
+2. Create a new virtual environment with either `venv` or `conda`
+3. Install pytorch and related packages into the environment as described below.
+4. Copy the python script from below into a file in your working directory. The
+   file should have extension `.py` such as `cifar10.py`.
+5. Run the script to train and evaluate the model. You could for example run it
+   with `python cifar10.py`.
+6. **Extra credit:** Improve the model and/or training regime and re-run the script.
+7. Save your python environment into a `environment.yml` for conda or a `requirements.txt` for `pip`.
+8. Zip the .pth model file and the environment file with the command `zip exercise.zip cifar10-model.pth environment.yml`
+   or `zip exercise.zip cifar10-model.pth requirements.txt` if you used pip.
+9. Upload the zip file to Gradescope.
+
+::: {.callout}
+For extra credit, try to improve the accuracy of the model. The student who
+has the highest accuracy will receive 10 extra credit points and recognition
+in class!
+:::
+
+## Install PyTorch
+
+From the [pytorch website](https://pytorch.org/get-started/locally/), the
+install instructions are:
+
+:::: {.panel-tabset}
+### MacOS
+
+:::: {.panel-tabset}
+##### Conda
+
+```bash
+conda install pytorch::pytorch torchvision -c pytorch
+```
+
+##### pip
+
+```bash
+pip install torch torchvision
+```
+::::
+
+### Linux
+
+:::: {.panel-tabset}
+##### Conda
+
+```bash
+conda install pytorch torchvision cpuonly -c pytorch
+```
+
+##### pip
+
+```bash
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+```
+::::
+
+::::
+
+## Python Script
+
+```{python}
+import torch
+import torch.optim as optim
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision
+import torchvision.transforms as transforms
+
+# Define transformations for the dataset
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+# Download and load the CIFAR-10 dataset
+trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=32, shuffle=True)
+
+testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False)
+
+# Classes
+classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+
+# Define the CNN model
+class SmallCNN(nn.Module):
+    def __init__(self):
+        super(SmallCNN, self).__init__()
+        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(32 * 8 * 8, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 32 * 8 * 8)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Initialize the model, loss function, and optimizer
+model = SmallCNN()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+# Training the model
+def train_model(model, trainloader, criterion, optimizer, epochs=5):
+    for epoch in range(epochs):  # Loop over the dataset multiple times
+        running_loss = 0.0
+        for i, data in enumerate(trainloader, 0):
+            # Get the inputs; data is a list of [inputs, labels]
+            inputs, labels = data
+
+            # Zero the parameter gradients
+            optimizer.zero_grad()
+
+            # Forward pass
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+
+            # Backward pass and optimize
+            loss.backward()
+            optimizer.step()
+
+            # Print statistics
+            running_loss += loss.item()
+            if i % 100 == 99:    # Print every 100 mini-batches
+                print(f'[Epoch {epoch + 1}, Batch {i + 1}] loss: {running_loss / 100:.3f}')
+                running_loss = 0.0
+
+    print('Finished Training')
+
+    # Save the model after training
+    torch.save(model.state_dict(), 'cifar10-model.pth')
+    print('Model saved as cifar10-model.pth')
+
+# Call the training function
+train_model(model, trainloader, criterion, optimizer)
+
+# Evaluation function to test the accuracy
+def evaluate_model(model, testloader):
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+    print(f'Accuracy of the network on the 10,000 test images: {100 * correct / total:.2f}%')
+
+# Call the evaluation function
+evaluate_model(model, testloader)
+
+```
+
 
 ## Recap
 
+In this module, we've covered:
+
+- Creating and managing python environments with `conda` and `venv`.
+- Installing packages with `conda` and `pip`.
+- Creating and managing `environment.yml` and `requirements.txt` files.
+- Training and evaluating a simple CNN on the CIFAR-10 dataset.

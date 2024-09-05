@@ -1,7 +1,8 @@
 project:
   output-dir: _revealjs
   render:
-    - 01_command_shells.qmd    
+    - 01_command_shells.qmd
+    - 02_python_environments.qmd
 
 format:
   revealjs:

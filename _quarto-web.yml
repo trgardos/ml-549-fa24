@@ -5,6 +5,7 @@ project:
     - index.qmd
     - schedule.qmd
     - 01_command_shells.qmd
+    - 02_python_environments.qmd
 
 execute: 
   freeze: auto
@@ -34,6 +35,8 @@ website:
         contents:
           - href: 01_command_shells.qmd
             text: 01 -- Command Shells
+          - href: 02_python_environments.qmd
+            text: 02 -- Python Environments
 
 format:
   html:

@@ -6,3 +6,5 @@ _site/
 _revealjs/
 
 /.quarto/
+
+data/
