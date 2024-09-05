@@ -105,6 +105,13 @@ Installation instructions are[here](https://learn.microsoft.com/en-us/windows/ws
 Once you setup WSL2, you can install a Linux distribution. Ubuntu is a popular
 choice, and we recommend that.
 
+Note that when you start the WSL2 shell, you are in the `/home/user` directory,
+which is different than your Windows home directory. You can get to your Windows
+home directory with `cd /mnt/c/Users/your_username`. Generally you don't want
+to be manipulating Windows files from the WSL2 shell and vice versa as there are
+some subtle file format differences which may cause problems. But if needed, you
+can navigate between the two filesystems.
+
 :::
 
 ## First Basic Commands
