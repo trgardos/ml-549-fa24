@@ -641,7 +641,7 @@ pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
 ## Python Script
 
-```{python}
+```python
 import torch
 import torch.optim as optim
 import torch.nn as nn
