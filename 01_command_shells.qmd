@@ -74,18 +74,37 @@ One or more of the processes listed will include `bash` or `zsh`.
 There are several options for command shells on Windows, provided below
 in increasing order of preference.
 
-#### Windows Terminal
+#### Windows Terminal/Command Prompt
 
 As mentioned above, Windows Terminal is a different shell from `bash` and `zsh`
 and is generally not as well supported by many machine learning related
-command line tools.
+command line tools. But once you have python and git installed, the python and
+git commands will work in Windows Terminal fairly similarly to Linux style.
 
-#### Windows GIT terminal
+#### Windows Powershell
 
-(Say someting about GIT bash and what directories it has access to))
+Windows Powershell is a more modern command shell that is similar to `zsh` and
+`bash`. It is the default shell on Windows 10 and later. (need to confirm this).
+But it is not exactly the command syntax of `bash` or `zsh`.
+
+#### Windows GIT Bash
+
+When you install GIT on Windows, it also installs a command shell called
+GIT Bash. This is a clone of the Linux `bash` shell and so the command syntax
+is more like Linux. It also operates in the Windows filesystem so it is
+straightforward to access files you use from Windows applications.
+
 #### Windows Subsystem for linux (WSL)
 
-(Recommend WSL2. Check how you get access to the Windows filesystem from WSL2.)
+Microsoft released [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/about) 
+(WSL) in 2016. WSL2 is a more modern version of WSL that is more compatible with
+Linux. It is the recommended way to use Linux on Windows.
+
+Installation instructions are[here](https://learn.microsoft.com/en-us/windows/wsl/install).
+
+Once you setup WSL2, you can install a Linux distribution. Ubuntu is a popular
+choice, and we recommend that.
+
 :::
 
 ## First Basic Commands
