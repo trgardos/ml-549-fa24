@@ -3,5 +3,8 @@
 
 # quarto output
 _site/
+_revealjs/
 
 /.quarto/
+
+data/

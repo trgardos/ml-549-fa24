@@ -53,7 +53,8 @@ the tab for your operating system.
 
 ### MacOS
 
-In MacOS, start the `terminal` app. ![MacoS Terminal](assets/images/macos_terminal_icon.jpeg){width="30px"} 
+In MacOS, start the `terminal` app. 
+![MacoS Terminal](assets/images/01_command_shells/macos_terminal_icon.jpeg){width="30px"} 
 
 Starting with MacOS Catalina, the default shell is [`zsh`](https://zsh.org/). If
 you've upgraded from an earlier version of Catalina, you might still be using
