@@ -581,17 +581,15 @@ need to upload your `environment.yml` or `requirements.txt` file.
 ## Exercise Instructions
 
 1. Create a directory for your exercise and cd into it.
-2. Create a new virtual environment with either `venv` or `conda`
-3. Install pytorch and related packages into the environment as described below.
+2. Create a new virtual environment with either `venv` or `conda` and then activate it.
+3. Install pytorch and related packages into the environment as described [below](#install-pytorch).
 4. Copy the python script from below into a file in your working directory. The
    file should have extension `.py` such as `cifar10.py`.
 5. Run the script to train and evaluate the model. You could for example run it
    with `python cifar10.py`.
 6. **Extra credit:** Improve the model and/or training regime and re-run the script.
 7. Save your python environment into a `environment.yml` for conda or a `requirements.txt` for `pip`.
-8. Zip the .pth model file and the environment file with the command `zip exercise.zip cifar10-model.pth environment.yml`
-   or `zip exercise.zip cifar10-model.pth requirements.txt` if you used pip.
-9. Upload the zip file to Gradescope.
+8. Upload the .pt model file and your environment file to Gradescope. Enter your name for the leaderboard.
 
 ::: {.callout}
 For extra credit, try to improve the accuracy of the model. The student who
@@ -714,9 +712,12 @@ def train_model(model, trainloader, criterion, optimizer, epochs=5):
 
     print('Finished Training')
 
-    # Save the model after training
-    torch.save(model.state_dict(), 'cifar10-model.pth')
-    print('Model saved as cifar10-model.pth')
+    # Using the TorchScript method for model saving
+    # Important! Do not change the following 2 lines of code except for the model name
+    scripted_model = torch.jit.script(model)
+    torch.jit.save(scripted_model, 'cifar10-model.pt')
+
+    print('Model saved as cifar10-model.pt')
 
 # Call the training function
 train_model(model, trainloader, criterion, optimizer)
@@ -733,11 +734,12 @@ def evaluate_model(model, testloader):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-    print(f'Accuracy of the network on the 10,000 test images: {100 * correct / total:.2f}%')
+    accuracy = 100 * correct / total
+    print(f'Accuracy of the network on the 10,000 test images: {accuracy:.2f}%')
+    return accuracy
 
 # Call the evaluation function
 evaluate_model(model, testloader)
-
 ```
 
 # Recap
