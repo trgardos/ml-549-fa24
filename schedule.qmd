@@ -21,7 +21,7 @@ title: Schedule
         <td><b>Assigned:</b>
           <ul>
             <li>Intro Survey (Gradescope)</li>
-            <li><a href="01_command_shells.html">HW1-Command Shells</a></li>
+            <li><a href="01_command_shells.qmd">HW1-Command Shells</a></li>
           </ul>
           <br><b>Due:</b> Nothing </td>
     </tr>
@@ -40,7 +40,16 @@ title: Schedule
                 <li><a href="02_python_environments.qmd">Python Environments</a></li>
             </ul>
         </td>
-        <td><b>Assigned:</b>  <br><b>Due:</b> Intro Surveys </td>
+        <td>
+          <b>Assigned:</b> 
+            <ul>
+                <li><a href="02_python_environments.qmd">HW2-Python Environments</a></li>
+            </ul>
+          <b>Due:</b>
+            <ul>
+                <li>Intro Surveys</li>
+            </ul>
+        </td>
     </tr>
     <tr> <!-- ### Week 2 ### -->
         <td colspan="4" style="background-color: #ededed"><b>Week 2</b> <i>(Preliminaries)</i></td>
