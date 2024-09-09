@@ -47,13 +47,23 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Sep 10</td>
-        <td>Lecture description.</td>
-        <td> TBA </td>
+        <td>
+            <ul>
+                <li>Git and GitHub</li>
+                <li>BU Shared Computing Cluster</li>
+            </ul>
+        </td>
+        <td> Bring your laptop to follow along with the lecture. </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>
         <td>Thu Sep 12</td>
-        <td>Lecture description.</td>
+        <td>
+            <ul>
+                <li>ML Project Lifecycle</li>
+                <li>Team Formation and Agreement</li>
+            </ul>
+        </td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
