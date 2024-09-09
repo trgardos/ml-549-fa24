@@ -21,7 +21,7 @@ title: Schedule
         <td><b>Assigned:</b>
           <ul>
             <li>Intro Survey (Gradescope)</li>
-            <li><a href="https://trgardos.github.io/ml-549-fa24/01_command_shells.html">HW1-Command Shells</a></li>
+            <li><a href="01_command_shells.html">HW1-Command Shells</a></li>
           </ul>
           <br><b>Due:</b> Nothing </td>
     </tr>
@@ -53,7 +53,11 @@ title: Schedule
                 <li>BU Shared Computing Cluster</li>
             </ul>
         </td>
-        <td> Bring your laptop to follow along with the lecture. </td>
+        <td> Bring your laptop to follow along with the lecture.
+            <ul>
+                <li><a href="03_git_github.html">Git and GitHub</a></li>
+            </ul>
+        </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>

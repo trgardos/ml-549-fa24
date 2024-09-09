@@ -1,56 +1,64 @@
 ---
 title: 'Essential Tools: Git'
-jupyter: python3
 ---
 
-::: {.content-hidden when-profile="slides"}
-This course focuses on developing practical skills in working with data and providing students with a hands-on understanding of classical data analysis techniques. 
-
-This will be a coding-intensive course. 
-
-Instruction in this course uses [Python](https://www.python.org/), since it allows for fast prototyping and is supported by a great variety of scientific (and, specifically, data related) libraries. See the [Introduction to Python](01-Intro-to-Python.qmd) lecture for a Python refresher.
-
-The course notes can be found under [this GitHub account](https://github.com/tools4ds/DS701-Course-Notes). Rendered versions of the course notes can be found [here](https://tools4ds.github.io/DS701-Course-Notes/). 
-
-The lecture notes of this course are rendered from [Quarto](https://quarto.org/) markdown files. The homeworks of this course are [Jupyter notebooks](https://jupyter.org).
-:::
-
-__Today's Agenda__ is a review of the essential tools you will need for this course.
-
-We are __not__ providing a comprehensive introduction to these tools.
-
-They are all __extensively__ documented online and you will need to familiarize with online resources to learn what you need.  
-
-Stack overflow, etc, is also your friend -- but as a reference, not as a way to solve homework problems!
-
-__The key tools you will need__ are:
-
-::: {.incremental}
-1. Git
-1. Pandas
-1. Scikit-Learn 
-:::
 
 ## Git
 
-One of the goals of this course is make you familiar with the modern workflow of code-versioning and collaboration. 
+One of the goals of this course is make you familiar with the modern workflow of
+code-versioning and collaboration. 
+
+Check if you have **git** installed.
+
+
+::: {.panel-tabset}
+### MacOS and Linux Command Shells
+
+```sh
+$ git --version
+```
+
+### Windows Command Shells
+
+For Windows Command Prompt, PowerShell and Git Bash, you can use the following command:
+
+```sh
+$ git --version
+```
+
+Similarly for WSL2 Ubuntu, you can use the same command, but it might be a 
+different version than above.
+
+:::
 
 If you don't have it already, download **git** from [here](http://git-scm.com/downloads). 
 
-If you don't already have one, you __must__ also create an account on GitHub.
+## GitHub
 
-You can find extensive documentation on how to use **git** on the [Git home page](https://git-scm.com/), the [Help Pages of Github](https://docs.github.com/en/get-started/quickstart), on [Atlassian](https://www.atlassian.com/git/tutorials/setting-up-a-repository), and many other sites.
+If you don't already have one, you __must__ also create an account on [GitHub](https://github.com/).
+
+Remember to add your full name to your profile so we can identify you.
+
+You can find extensive documentation on how to use **git** on the
+[Git home page](https://git-scm.com/), the [Help Pages of Github](https://docs.github.com/en/get-started/quickstart),
+on [Atlassian](https://www.atlassian.com/git/tutorials/setting-up-a-repository), and many other sites.
 
 ## Importance of using Git
 
 In software development, the use of Git is crucial for several reasons.
 
 ::: {.incremental}
-1. **Version Control**: Git allows you to track changes in your codebase over time. This means you can revert to previous versions if something goes wrong, compare changes, and understand the history of your project.
-1. **Collaboration**: Multiple developers can work on the same project simultaneously without interfering with each other’s work. Git manages and merges changes efficiently.
-1. **Backup**: Your code is stored in a repository, which can be hosted on platforms like GitHub, GitLab, or Bitbucket. This provides a backup in case your local files are lost or corrupted.
-1. **Branching**: Git’s branching model allows you to create separate branches for new features, bug fixes, or experiments. This keeps the main codebase stable and clean.
-1. **Integration**: Git integrates well with various CI/CD (continuous integration/continuous development) tools, enhancing automated testing, deployment, and overall DevOps practices.
+1. **Version Control**: Git allows you to track changes in your codebase over time. 
+   This means you can revert to previous versions if something goes wrong, compare changes, and understand the history of
+   your project.
+1. **Collaboration**: Multiple developers can work on the same project simultaneously without interfering with each
+   other’s work. Git manages and merges changes efficiently.
+1. **Backup**: Your code is stored in a repository, which can be hosted on platforms like GitHub, GitLab, or Bitbucket. 
+   This provides a backup in case your local files are lost or corrupted.
+1. **Branching**: Git’s branching model allows you to create separate branches for new features, bug fixes, or experiments. 
+   This keeps the main codebase stable and clean.
+1. **Integration**: Git integrates well with various CI/CD (continuous integration/continuous development) tools, 
+   enhancing automated testing, deployment, and overall DevOps practices.
 :::
 
 ## Working with Git
@@ -82,6 +90,20 @@ Use the email that you used for your GitHub account.
 
 After installing Git, we can configure our first repository. First, let's create a new directory.
 
+I usually have a folder on my computer called `Source`.
+
+Change into this directory on your command shell.
+
+::: {.callout-tip}
+It's best not to put your source in a folder that is backed up by **iCloud**,
+**Google Drive**, **Dropbox** or **OneDrive** because these projects can be quite
+large and we will be using GitHub for backup anyway.
+:::
+
+---
+
+Let's create a new folder called `thoughts` that we will track with *git*.
+
 ```{sh}
 $ mkdir thoughts
 $ cd thoughts
@@ -92,6 +114,8 @@ Now, we can create a *git* repository in this directory.
 ```{sh}
 $ git init
 ```
+
+This actually creates a hidden folder called `.git` in the directory.
 
 We can check that everything is set up correctly by asking *git* to tell us the status of our project.
 
@@ -196,7 +220,8 @@ We use the -m flag (for "message") to record a comment that will help us remembe
 ## Committing continued
 :::
 
-If we just run ```git commit``` without the ```-m``` option, *git* will launch an editor such as ```vim``` (or whatever other editor we configured at the start) so that we can write a longer message. 
+If we just run ```git commit``` without the ```-m``` option, *git* will launch an editor such as ```vim``` (or whatever
+other editor we configured at the start) so that we can write a longer message. 
 
 If we run git status now
 
@@ -206,7 +231,9 @@ On branch main
 nothing to commit, working tree clean
 ```
 
-it tells us everything is up to date. If we want to know what we've done recently, we can ask *git* to show us the project's history using ```git log```.
+it tells us everything is up to date. 
+
+If we want to know what we've done recently, we can ask *git* to show us the project's history using ```git log```.
 
 ```{sh}
 $ git log
@@ -235,7 +262,7 @@ Now, suppose that we edit the file.
 
 ```{sh}
 Starting to think about data
-I need to attend ds701
+I need to attend ds549
 ```
 
 Now if we run ```git status```, *git* will tell us that a file that it is tracking has been modified:
@@ -272,7 +299,7 @@ index 0ac4b7b..c5b1b05 100644
 +I need to attend ds701
 ```
 
-OK, we are happy with that, so let's commit our change.
+OK, we are happy with that, so let's add and commit our change.
 
 ```{sh}
 $ git commit -m "Added line about related course"
@@ -295,20 +322,24 @@ $ git commit -m "Added line about related course"
  1 file changed, 1 insertion(+)
 ```
 
-*Git* insists that we add files to the set we want to commit before actually committing anything because we may not want to commit everything at once. 
+*Git* insists that we add files to the set we want to commit before actually committing anything because we may not want
+to commit everything at once. 
 
-For example, suppose we're adding a few citations to our project. We might want to commit those additions, and the corresponding addition to the bibliography, but not commit the work we're doing on the analysis (which we haven't finished yet).
+For example, suppose we're adding a few citations to our project. We might want to commit those additions, and the
+corresponding addition to the bibliography, but not commit the work we're doing on the analysis (which we haven't finished yet).
 
 ## Recovering old versions
 
-We can save changes to files and see what we have changed. How can we restore older versions however? Let's suppose we accidentally overwrite the file.
+We can save changes to files and see what we have changed. How can we restore older versions however? Let's suppose we
+accidentally overwrite the file but didn't stage the changes.
 
 ```{sh}
+$ echo "Despair! Nothing works" > science.txt
 $ cat science.txt
 Despair! Nothing works
 ```
 
-Now, ```git status``` tells us that the file has been changed, but those changes haven't been staged.
+Now, `git status` tells us that the file has been changed, but those changes haven't been staged.
 
 ```{sh}
 $ git status
@@ -325,11 +356,60 @@ no changes added to commit (use "git add" and/or "git commit -a")
 We can put things back the way they were by using ```git checkout```.
 
 ```{sh}
-$ git checkout HEAD science.txt
+$ git checkout --- science.txt
 $ cat science.txt
 Starting to think about data
 I need to attend ds701
 ```
+
+## Recovering old versions, continued
+
+What if we changed it and checked it in?
+
+```{sh}
+$ echo "Despair! Nothing works" > science.txt
+$ cat science.txt
+Despair! Nothing works
+
+$ git add science.txt
+$ git commit -m "Added exclamation"
+```
+
+We have a new commit, but we want to go back to the previous version.
+
+We have two options:
+1. Throw away the changes we have made and go back to the last commit.
+2. Undo the commit and unstage the changes.
+
+```{sh}
+$ git reset --soft HEAD~1
+```
+
+Now do `git status`.
+
+```{sh}
+$ git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   science.txt
+```
+
+Let's commit the changes.
+
+```{sh}
+$ git commit -m "oops again"
+```
+
+But now we want to throw away the commit.
+
+```{sh}
+$ git reset --hard HEAD~1
+$ cat science.txt
+Starting to think about data
+I need to attend ds549
+```
+
 
 ## GitHub
 
@@ -347,7 +427,8 @@ Next, we will cover how you can clone the course's repository and how to submit 
 ## Github continued
 :::
 
-For more information on how to create your own repository on GitHub and upload code to it, please see the tutorial by [Software Carpentry](http://swcarpentry.github.io/git-novice/).
+For more information on how to create your own repository on GitHub and upload
+code to it, please see [Start your journey -- Learn the basics of GitHub](https://docs.github.com/en/get-started/start-your-journey).
 
 ![](assets/images/03_git/github-workflow.jpg)
 
@@ -499,19 +580,15 @@ A pull request (PR) is a way to propose changes to a codebase. When you create a
 
 ## Course repositories
 
-The material of the course is hosted on GitHub, under [this account](https://github.com/tools4ds/DS701-Course-Notes).
+The material of the course is hosted on GitHub, under [this account](https://github.com/trgardos/ml-549-fa24).
 
 In order to download a copy of the lectures and run them locally on your computer, you need to clone the lecture repository. To do that:
 
-1. Create a new folder for the course.
+1. Copy the clone url from the [repository's website](https://github.com/trgardos/ml-549-fa24).
+2. Clone the repository from *git*.
 ```
-$ mkdir ds701
-$ cd ds701
-```
-2. Copy the clone url from the [repository's website](https://github.com/tools4ds/DS701-Course-Notes).
-3. Clone the repository from *git*.
-```
-$ git clone https://github.com/tools4ds/DS701-Course-Notes.git
+$ git clone https://github.com/trgardos/ml-549-fa24.git
+$ cd ml-549-fa24
 ```
 
 You should now have a directory with the course material.
@@ -521,3 +598,43 @@ To update the repository and download the **new material**, type
 ```{sh}
 $ git pull
 ```
+
+## Exercise
+
+Go to your page on GitHub, e.g. `https://github.com/your-github-username`.
+
+Click on the `+` on the upper right corner of the page and select `New repository`.
+
+Call it "learn-github".
+
+Leave the repository public.
+
+Select the checkbox `Add a README file`.
+
+Click on `Create repository`.
+
+> Because we created this repository with a README file, GitHub automatically added it to the repository and so the
+> repository is not empty. 
+
+To clone the repository, click on `<> Code` and copy the URL.
+
+Then, clone the repository from *git*.
+
+```{sh}
+$ git clone https://github.com/your-github-username/learn-github.git
+$ cd learn-github
+```
+
+Now you can start working on the repository.
+
+Try:
+
+1. Create a new branch
+2. Add a new file text file to the repository and add some text to it.
+3. Add and commit the changes.
+4. Push the changes to the repository.
+5. Create a pull request.
+6. Merge the pull request and delete the branch on GitHub.
+7. Pull the changes to your local repository.
+8. Delete the branch from your local repository.
+
