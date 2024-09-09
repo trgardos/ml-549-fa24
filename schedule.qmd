@@ -58,7 +58,12 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Sep 12</td>
-        <td>ML Project Lifecycle</td>
+        <td>
+            <ul>
+                <li>ML Project Lifecycle</li>
+                <li>Team Formation and Agreement</li>
+            </ul>
+        </td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
