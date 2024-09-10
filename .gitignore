@@ -10,3 +10,6 @@ _freeze/
 __pycache__/
 
 data/
+
+# MacOS System Files
+.DS_Store
