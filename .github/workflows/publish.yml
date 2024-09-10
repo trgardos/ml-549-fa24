@@ -24,6 +24,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       # Downloads and installs the OS specific version of Quarto
       - name: Set up Quarto
