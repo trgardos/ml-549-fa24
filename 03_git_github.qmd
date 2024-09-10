@@ -356,7 +356,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 We can put things back the way they were by using ```git checkout```.
 
 ```{sh}
-$ git checkout --- science.txt
+$ git checkout -- science.txt
 $ cat science.txt
 Starting to think about data
 I need to attend ds701
@@ -378,8 +378,8 @@ $ git commit -m "Added exclamation"
 We have a new commit, but we want to go back to the previous version.
 
 We have two options:
-1. Throw away the changes we have made and go back to the last commit.
-2. Undo the commit and unstage the changes.
+
+**Option 1: Undo the commit and unstage the changes**
 
 ```{sh}
 $ git reset --soft HEAD~1
@@ -395,6 +395,8 @@ Changes to be committed:
         modified:   science.txt
 ```
 
+**Option 2: Throw away the changes we have made and go back to the last commit**
+
 Let's commit the changes.
 
 ```{sh}
@@ -405,9 +407,14 @@ But now we want to throw away the commit.
 
 ```{sh}
 $ git reset --hard HEAD~1
+
 $ cat science.txt
 Starting to think about data
 I need to attend ds549
+
+$ git status
+On branch main
+nothing to commit, working tree clean
 ```
 
 
@@ -600,6 +607,8 @@ $ git pull
 ```
 
 ## Exercise
+
+Here's an exercise to get you started with GitHub and practice the concepts we have covered so far.
 
 Go to your page on GitHub, e.g. `https://github.com/your-github-username`.
 
