@@ -1,0 +1,379 @@
+---
+title: "Shared Computing Cluster"
+---
+
+## Intro to SCC
+
+<div style="float: right; margin: 0 1em 1em 0;">
+  <img src="./assets/images/04_scc/sccphoto1_sm.jpg" alt="SCC Photo">
+</div>
+BU's Shared Computing Cluster (SCC) is heterogeneeous Linux cluster composed of both _Shared_ and _Buy-in_ nodes.
+
+Currently:
+
+* Over 12,000 shared CPU cores
+* Over 16,000 Buy-in CPU cores
+* Over 400 GPUs
+* 14 Petabytes of storage
+
+CDS has buy-in nodes also.
+
+<!--
+## CDS SCC Buy-In
+
+Partial list as of Fall 2023.
+
+| Node Name(s) | Cores per Node | Memory (GB) | Add-Ons | SU Factor | Annual SU Capacity | Utilization by Member Projects (%) | Utilization by All (%) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| scc-ga3, scc-ga4 | 32 | 192 |  | 1.0 | 560,640 | 6.05% | 18.73% |
+| scc-q31, scc-q32 | 32 | 192 | 4 V100 GPUs | 1.0 | 560,640 | 6.63% | 9.913% |
+| scc-tb2, scc-tb3, scc-tc1, scc-tc2, scc-tc3, scc-tc4 | 20 | 256 |  | 1.0 | 1,051,200 | 4.29% | 16.95% |
+| scc-v08 | 32 | 1024 |  | 1.0 | 280,320 | 1.52% | 9.20% |
+-->
+
+## SCC
+
+:::: {.columns}
+::: {.column width="60%"}
+![](./assets/images/04_scc/SCC-OnDemand-Login-Nodes.png){width="600px"}
+:::
+::: {.column width="40%"}
+The easiest way to get to a terminal session on the Shared Computing Cluster (SCC)
+is to navigate to [SCC On Demand](https://scc-ondemand.bu.edu).
+
+The nodes you see on the list are the **login nodes**.
+
+
+:::
+::::
+
+* You are restricted from running computation workloads on the login nodes.
+* Use them for simple file access and to submit jobs to the queue system.
+* Heavy computation processes will be killed after a few (15?) minutes.
+* Heavy computation processes should be run on the **compute nodes** via the 
+  queueing system or from interactive sessions.
+
+## SSH Connection to SCC Login Nodes
+
+You can also `ssh` to the login nodes:
+
+* `<username>@scc1.bu.edu` or 
+* `<username>@scc2.bu.edu` or
+* `<username>@scc3.bu.edu `
+
+ The first time you `ssh`, you might get the message a like this with `scc1`:
+
+```
+The authenticity of host 'scc2.bu.edu (192.12.187.131)' can't be established.
+ED25519 key fingerprint is SHA256:OmvL4FQ48QTpcXDpYE63rse1tM6pfKfSUgaVW1+mlIw.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? 
+```
+
+Just type yes and hit `return`.
+
+## Connect to Login Node
+
+:::: {.columns}
+::: {.column width="60%"}
+![](./assets/images/04_scc/SCC-login-node1.png){width="600px"}
+:::
+::: {.column width="40%"}
+Let's connec to a login node.,
+
+You'll start in your home directory.
+
+```bash
+$ pwd
+/usr2/faculty/tgardos
+```
+You can show the processes you're running with `ps`.
+
+```bash
+$ ps
+    PID TTY          TIME CMD
+3507536 pts/328  00:00:00 bash
+3518333 pts/328  00:00:00 ps
+```
+
+Which says you are running the `bash` shell and also the `ps` command.
+:::
+::::
+
+## Updating your prompt
+
+As we showed before, you can update your prompt to show the current working directory
+and the current git branch (if you're in a git repository).
+
+Add the following lines to the end of your `.bashrc` file:
+
+```bash
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+export PS1="\[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
+```
+Then either exit and restart your terminal or just run `source ~/.bashrc` this
+time.
+
+## SCC Group Membership
+
+We're in a shared computing environment, so we have to be careful about
+group membership and file permissions.
+
+You'll be a member of a group for every project or class you're in on SCC.
+
+To see what groups you're in, you can use the `groups` command:
+
+```bash
+~ $ groups
+sparkgrp ds549 ds549-ta ds598 ds598ta herbdl ai-tutor spareit
+```
+
+The above are all the groups I'm in.
+
+But you have to be pay attention to what your current **default group** is.
+
+You can see what your default group is with the `id` command:
+
+```bash
+~ $ id
+uid=426625(tgardos) gid=363482(sparkgrp) groups=363482(sparkgrp),430422(ds549),430527(ds549-ta),450171(ds598),450177(ds598ta),450334(herbdl),450346(ai-tutor),450373(spareit)
+```
+
+This shows my user ID (uid) and my default group ID (gid) which is currently `sparkgrp`.
+
+Most of you will likely be in the `ds549` group. When you get assigned projects,
+you will also be added to the `sparkgrp` group.
+
+If you just want to _just_ see your default group, you can use the command:
+
+```bash
+~ $ id -ng
+sparkgrp
+```
+
+## Why does default group matter?
+
+Remember back in [01_command_shells.qmd](01_command_shells.qmd#ls----list-directory-contents) we talked about
+file permissions?
+
+To recap, with the `ls -l` command I showed you:
+
+```sh
+$ ls -al
+total 2
+drwxr-sr-x 3 tgardos ds549 4096 Sep  6  2023 .
+drwxr-s--- 9 root    ds549 4096 Jan 26  2023 ..
+drwxr-sr-x 9 tgardos ds549 4096 Apr  9 12:35 tgardos
+```
+
+The file permissions are a string of 10 characters. The first character is
+the file type. The next 9 characters are the file permissions in triplets
+corresponding to the user, group, and other permissions.
+
+In each triplet, the first character is the read permission, the second character
+is the write permission, and the third character is the execute permission. If
+there is `-` in the triplet, it means the permission is not granted.
+
+If there is a `@` at the end of the line, it means the file has extended
+attributes.
+
+```
+             group permissions
+        file type    |    extended attributes
+                |   ---   |
+                drwxr-xr-x@
+                 ---   ---
+                  |     |
+                  |       other/world permissions
+                  user permissions
+```
+
+When you are collaborating with others:
+
+* You have to make sure you give `r/w` permissions to the group.
+* You have to make sure the file or directory is owned by the right group
+
+To change my group to `ds549`, I can use the `newgrp` command:
+
+```bash
+$ newgrp ds549
+
+$ id -ng
+ds549
+```
+
+## To Change File or Directory Permissions
+
+From my home directory, I'll create a directory and change into it:
+
+```bash
+~ $ mkdir tempdir
+~ $ cd tempdir
+~/tempdir $ ls -al
+total 1
+drwxr-xr-x  2 tgardos sparkgrp 4096 Sep 10 13:03 .
+drwx------ 40 tgardos sparkgrp 4096 Sep 10 13:03 ..
+```
+
+I'll create a file and check ownership and permissions:
+
+```bash
+~/tempdir $ touch file1.txt
+~/tempdir $ ls -l
+total 0
+-rw-r--r-- 1 tgardos sparkgrp 0 Sep 10 13:03 file1.txt
+```
+
+See that it created a file with my default group `sparkgrp`.
+
+```bash
+~/tempdir $ id -ng
+sparkgrp
+```
+
+Now, I'll change the group permissions of the file:
+
+```bash
+~/tempdir $ chmod g+w file1.txt 
+~/tempdir $ ls -l
+total 0
+-rw-rw-r-- 1 tgardos sparkgrp 0 Sep 10 13:03 file1.txt
+```
+
+Let's change my default group to `ds549`:
+
+```bash
+~/tempdir $ newgrp ds549
+~/tempdir $ id -ng
+ds549
+```
+Now let's create another file and check ownership and permissions:
+
+```bash
+~/tempdir $ touch file2.txt
+~/tempdir $ ls -l
+total 0
+-rw-rw-r-- 1 tgardos sparkgrp 0 Sep 10 13:03 file1.txt
+-rw-r--r-- 1 tgardos ds549    0 Sep 10 13:07 file2.txt
+```
+
+See that I have files from both groups. People in `sparkgrp` can read and write
+to `file1.txt` and people in `ds549` can read from file2.txt.
+
+## SCC Projects
+
+You won't want to do much work in your home directory.
+
+For starters you have limited storage quota.
+
+```bash
+$ quota -s
+Home Directory Usage and Quota:
+Name           GB    quota    limit in_doubt    grace |    files    quota    limit in_doubt    grace
+tgardos   7.64500     10.0     11.0      0.0     none |   86,169  200,000  200,000       19     none
+```
+
+Check my current default group:
+
+```bash
+$ id -ng
+sparkgrp
+```
+
+You should each be in the `ds549` project.
+
+```bash
+~ $ cd /projectnb/ds549
+/projectnb/ds549 $ ls
+admin  archive  datasets  materials  projects  README.md  students  workspaces
+```
+
+You each have a dedicated working directory in `students`.
+
+```bash
+/projectnb/ds549 $ cd students
+
+/projectnb/ds549/students $ ls
+abhaya13  anandro  chimmay   fahuddin  hengc     jmstein  markmaci  mounika5  shivenrk  songfan  xudd
+ac25      ayush25  daf       gluzmans  jianying  manavk   marychoe  mvoong    smallk    thannah  yuanlj
+alokma    bmv2021  enricoll  grbxni    jinanshi  marekp   mchg      njquisel  solheim   wycheng  ywnl
+```
+
+::: {.callout-note}
+You will each be added to the `sparkgrp` group as well.
+:::
+
+::: {.callout-important}
+Super important point. You each should be working on your own copy of the project
+repo in your own working directory. Use **GitHub** for asynchronous collaboration.
+:::
+
+## SCC GitHub Exercise
+
+:::: {.columns}
+::: {.column width="60%"}
+![](./assets/images/04_scc/github-ml-549-course.png){width="600px"}
+:::
+::: {.column width="40%"}
+Let's do a quick exercise to get you comfortable with using GitHub from SCC.
+
+Navigate to [https://github.com/bu-spark/ml-549-course](https://github.com/bu-spark/ml-549-course).
+
+Fork the repo to your GitHub account.
+
+:::
+::::
+
+---
+
+:::: {.columns}
+::: {.column width="50%"}
+![](./assets/images/04_scc/github-ml-549-course2.png){width="600px"}
+:::
+::: {.column width="50%"}
+
+Navigate to `/projectnb/ds549/students/<your-username>`.
+
+Clone the repo to your working directory.
+
+```bash
+$ git clone https://github.com/BU-Spark/ml-549-course.git
+
+$ cd ml-549-course
+$ git remote -v
+```
+:::
+::::
+
+Now let's create a new branch and make some changes.
+
+```bash
+$ git checkout -b my-new-branch
+```
+
+If you updated your `.bashrc` you should see your branch in the prompt.
+
+```bash
+$ touch my-new-file.txt
+$ git add my-new-file.txt
+$ git commit -m "Add my new file"
+$ git push origin my-new-branch
+```
+
+Now if you wanted, you can create a pull request from your branch in your forked
+repo back to the main repo.
+
+## Future SCC Topics
+
+* Managing python environments on SCC
+* SCC batch compute jobs
+    * Listing CDS queues and resources
+    * understanding the queueing system
+        * submitting jobs
+        * monitoring jobs
+        * debugging jobs
+* SCC interactive sessions
+
+You can see some of this info on my [SCC Tips](https://github.com/BU-Spark/ml-549-course/blob/main/docs/scc-tips.md)
