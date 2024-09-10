@@ -647,3 +647,14 @@ Try:
 7. Pull the changes to your local repository.
 8. Delete the branch from your local repository.
 
+## Recap
+
+In this lecture, we covered the following topics:
+
+1. Configuring git
+1. Creating a repository
+1. Staging and committing files
+1. Modifying files
+1. Recovering old versions
+1. Branching
+1. Pull requests
