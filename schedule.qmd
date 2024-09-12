@@ -78,7 +78,7 @@ title: Schedule
                 <li>MLops</li>
             </ul>
         </td>
-        <td> TBA </td>
+        <td> <a href="https://docs.google.com/presentation/d/1ONF_yENxXJW89GmrM4sSCCe5USJj-RCgimrsWCBdkQQ/edit?usp=sharing">Lecture Slides</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 3 ### -->
