@@ -64,7 +64,8 @@ title: Schedule
         </td>
         <td> Bring your laptop to follow along with the lecture.
             <ul>
-                <li><a href="03_git_github.html">Git and GitHub</a></li>
+                <li><a href="03_git_github.qmd">Git and GitHub</a></li>
+                <li><a href="04_scc.qmd">BU Shared Computing Cluster</a></li>
             </ul>
         </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
@@ -74,7 +75,7 @@ title: Schedule
         <td>
             <ul>
                 <li>ML Project Lifecycle</li>
-                <li>Team Formation and Agreement</li>
+                <li>MLops</li>
             </ul>
         </td>
         <td> TBA </td>
@@ -85,7 +86,11 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Sep 17</td>
-        <td>Lecture description.</td>
+        <td>
+             <ul>
+                <li>Team Formation and Agreement</li>
+            </ul>
+        </td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
