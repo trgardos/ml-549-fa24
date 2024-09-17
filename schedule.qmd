@@ -91,7 +91,7 @@ title: Schedule
                 <li>Team Formation and Agreement</li>
             </ul>
         </td>
-        <td> TBA </td>
+        <td> <a href="https://docs.google.com/presentation/d/1OfMZJga4JM7GPbJN5SRslcSS8NFd_iqQEJrB6Ae5q4s/edit?usp=sharing">Lecture Slides</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>
