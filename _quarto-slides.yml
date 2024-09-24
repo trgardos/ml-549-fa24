@@ -5,6 +5,7 @@ project:
     - 02_python_environments.qmd
     - 03_git_github.qmd
     - 04_scc.qmd
+    - 06_scc_cont.qmd
 
 format:
   revealjs:
