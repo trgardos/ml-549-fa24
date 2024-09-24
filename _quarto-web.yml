@@ -8,7 +8,7 @@ project:
     - 02_python_environments.qmd
     - 03_git_github.qmd
     - 04_scc.qmd
-
+    - 06_scc_cont.qmd
 execute: 
   freeze: auto
 
@@ -43,6 +43,8 @@ website:
             text: 03 -- Git and GitHub
           - href: 04_scc.qmd
             text: 04 -- Shared Computing Cluster
+          - href: 06_scc_cont.qmd
+            text: 06 -- SCC Continued
 
 format:
   html:
