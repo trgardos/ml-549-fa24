@@ -16,7 +16,7 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Sep 3</td>
-        <td>Welcome, introduction, and course overview.</td>
+        <td>01 -- Welcome, introduction, and course overview.</td>
         <td> <a href="https://docs.google.com/presentation/d/1fX06VJhGbSvB2pyM67pPjspNp1Co4zMZjTHr_B2uprY">Lecture Slides</a></td>
         <td><b>Assigned:</b>
           <ul>
@@ -27,8 +27,8 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Sep 5</td>
-        <td>
-            <ul>
+        <td> 02 -- Topics
+            <ul> 
                 <li><b>Project Pitches</b></li>
                 <li>Command Shells Recap</li>
                 <li>Python Environments</li>
@@ -56,7 +56,7 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Sep 10</td>
-        <td>
+        <td> 03 -- Topics
             <ul>
                 <li>Git and GitHub</li>
                 <li>BU Shared Computing Cluster</li>
@@ -72,7 +72,7 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Sep 12</td>
-        <td>
+        <td> 04 -- Topics
             <ul>
                 <li>ML Project Lifecycle</li>
                 <li>MLops</li>
@@ -86,18 +86,15 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Sep 17</td>
-        <td>
-             <ul>
-                <li>Team Formation and Agreement</li>
-            </ul>
+        <td> 05 -- Team Formation and Agreement
         </td>
         <td> <a href="https://docs.google.com/presentation/d/1OfMZJga4JM7GPbJN5SRslcSS8NFd_iqQEJrB6Ae5q4s/edit?usp=sharing">Lecture Slides</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>
         <td>Thu Sep 19</td>
-        <td>ML Ethics (Seth V.)</td>
-        <td> TBA </td>
+        <td> 06 -- ML Ethics (Seth V.)</td>
+        <td> <a href="https://drive.google.com/file/d/1nN1xaaP8VVG-s-GiaAhVO2_0L7bDJSED/view?usp=drive_link">Lecture Slides</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
         <tr> <!-- ### Week 4 ### -->
@@ -105,14 +102,29 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Sep 24</td>
-        <td>Lecture description.</td>
-        <td> TBA </td>
+        <td> 07 -- Topics
+            <ul>
+                <li>Project Outline Document</li>
+                <li>SCC environment setup</li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li><a href="https://docs.google.com/presentation/d/16i6dQAnyoTw3WoJF_fENnkAhz08LL1mOaB0sWi3u8gw/edit?usp=drive_link">Lecture Slides</a></li>
+                <li><a href="07_scc_cont.qmd">SCC env notes</a></li>
+            </ul>
+        </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>
         <td>Thu Sep 26</td>
-        <td>Lecture description.</td>
-        <td> TBA </td>
+        <td> 08 -- Topics 
+            <ul>
+                <li> SCC Batch Computing </li>
+                <li> Lab time </li>
+            </ul>
+        </td>
+        <td> <a href="08_scc_batch_computing.qmd">Batch computing notes</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
         <tr> <!-- ### Week 5 ### -->
