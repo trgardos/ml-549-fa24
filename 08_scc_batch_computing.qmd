@@ -1,0 +1,731 @@
+---
+title: SCC Batch Computing
+---
+
+## Introduction
+
+Most of your heavy compute, such as model training is best run as _non-interactive batch jobs_
+on the SCC.
+
+Here, we'll get familiar with the process and commands.
+
+SCC's batch job system is based on the Sun Grid Engine 
+
+References:
+https://www.bu.edu/tech/support/research/system-usage/running-jobs/
+
+All the examples here need to be run on an SCC node. A login node is fine.
+
+## `qsub` command
+
+Non-interactive batch jobs are submitted with the `qsub` command.
+
+Here's a trivial batch job submission. We'll just execute the shell `printenv`
+command which prints all the environment variables in your shell.
+
+```bash
+$ qsub -b y printenv
+Your job 294013 ("printenv") has been submitted
+```
+
+The `-b y` option says the command is likely a binary executable, but can also
+be a script. The submission host won't try to parse the command as a script and
+will just pass the path to the command to the execustion node.
+
+## `qstat` command
+
+You can check the status of your job in the queue with
+
+```bash
+$ qstat -u tgardos
+job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID 
+-----------------------------------------------------------------------------------------------------------------
+ 294013 0.00000 printenv   tgardos      qw    09/21/2024 20:25:16                                    1 
+```
+
+The `-u userID` option only shows your jobs. Leave it off and you will see all the jobs
+currently queued.
+
+You see it lists the
+
+* job ID
+* priority of the job
+* name of the job
+* user
+* job's state in the queue -- here it is `qw` (waiting to run).
+* submission/start time
+* queue  -- the queue name if the job is running
+
+At some point `qstat` will no longer show any jobs in the queue. This one doesn't
+run for long, so you probably won't catch it running.
+
+After the job finishes, you'll see in the directory you submitted the job from
+2 files:
+
+```bash
+$ ls -al pri*
+-rw-r--r-- 1 tgardos sparkgrp    0 Sep 21 20:26 printenv.e294013
+-rw-r--r-- 1 tgardos sparkgrp 1531 Sep 21 20:26 printenv.o294013
+```
+
+Notice the files are the job name with either a `.e<jobID>` or `.o<jobID>` output.
+
+These are standard and error outputs of the job.
+
+In this case the error output was 0 bytes, but the job output was 
+
+```bash
+$ cat printenv.o294013
+QUEUE=cds
+SGE_O_HOST=scc1
+HOSTNAME=scc-tc4.scc.bu.edu
+ENVIRONMENT=BATCH
+REQUEST=printenv
+SGE_STDIN_PATH=/dev/null
+SGE_CELL=default
+NHOSTS=1
+SGE_O_WORKDIR=/usr2/faculty/tgardos
+...
+```
+
+Which is the printout of the environment variables on the node the job was 
+executed on, which was `scc-tc4.scc.bu.edu`.
+
+You'll also see a lot environment variabels with `SGE_` prefix, which are apparently
+set as part of the Sun Grid Engine batch queueing system.
+
+## `qacct` command
+
+You can get information about completed jobs with 
+
+```bash
+$ qacct -j 294013
+==============================================================
+qname        cds                 
+hostname     scc-tc4.scc.bu.edu  
+group        sparkgrp            
+owner        tgardos             
+project      sparkgrp            
+department   defaultdepartment   
+jobname      printenv            
+jobnumber    294013              
+taskid       undefined
+account      sge                 
+priority     0                   
+qsub_time    Wed Sep 21 20:25:16 2024
+start_time   Wed Sep 21 20:26:33 2024
+end_time     Wed Sep 21 20:26:33 2024
+...
+```
+We'll come back to why 'department' and 'project' maybe impact which resources
+have access to.
+
+## `qdel` command
+
+You can delete a job waiting in queue with `qdel jobID` command.
+
+## VSCode Remote
+
+We're going to be playing with some short scripts. You can do everything
+via the SCC Dashboard login node and text editors, but it can be much more 
+convenient to use _VS Code with Remote Extension Pack_.
+
+1. Open VS Code locally on your machine.
+2. Install the "Remote Development" extension pack by Microsoft from the extension marketplace.
+3. Now connect to remote host `scc1.bu.edu`, follow the prompts to connect.
+4. From the Terminal menu, open a new terminal.
+
+## Submitting a script
+
+In general we don't want to run a single binary command but rather usually a
+python script with some environment configuration first.
+
+For that it's best to submit a shell script that configures the environment and
+then runs the python script.
+
+So let's create a shell script
+
+```{.bash filename="scriptv1.sh"}
+#!/bin/bash -l
+
+echo "Print python version"
+python --version
+
+python myscript.py
+
+```
+
+::: {.callout-important}
+To be processed correctly, the shell script must have a blank line at the end of the file.
+:::
+
+You see that it is running a python script, that in this case can be a simple script
+
+```{.python filename="myscript.py"}
+print("Hello batched world!")
+```
+
+We can submit and check the status.
+
+```bash
+$ qsub scriptv1.sh 
+Your job 294119 ("scriptv1.sh") has been submitted
+
+$ qstat -u tgardos
+job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID 
+-----------------------------------------------------------------------------------------------------------------
+ 294119 0.00000 scriptv1.sh  tgardos      qw    09/21/2024 21:12:46                                    1        
+```
+
+Actually, in this case, I caught the queue status while it was running
+
+```bash
+$ qstat -u tgardos
+job-ID  prior   name       user         state submit/start at     queue                          slots ja-task-ID 
+-----------------------------------------------------------------------------------------------------------------
+ 294119 1.10000 scriptv1.sh  tgardos      r     09/21/2024 21:14:04 cds@scc-tc3.scc.bu.edu             1        
+```
+
+And `cat` the output
+
+```bash
+$ cat scriptv1.sh.o294119 
+Print python version
+Python 3.6.8
+Hello batched world!
+```
+
+::: {.callout-tip}
+By the way, even for longer jobs, I will start the script manually just to make sure
+it starts ok, then kill it, instead of waiting for it to queueu and run to find
+out I made a simple mistake in sthe script. 
+:::
+
+::: {.callout-caution}
+This won't work if you want to train
+on a GPU, but you can use the `qrsh` command to get a GPU node.
+:::
+
+```bash
+$ source scriptv1.sh
+Print python version
+Python 3.6.8
+Hello batched world!
+```
+
+## Setting up batch job environment
+
+So one thing you'll notice is that the python version is 3.6.8, which is not the
+latest version. So let' update our script.
+
+```{.bash filename="scriptv2.sh"}
+#!/bin/bash -l
+
+module load python3/3.12.4
+
+echo "Print python version"
+python --version
+
+python myscript.py
+
+```
+
+Now when we run
+
+```bash
+$ source scriptv2.sh 
+Print python version
+Python 3.12.4
+Hello batched world!
+``` 
+
+## Job Submission Directives
+
+We can add job submission directives to our shell script with lines beginning
+with `#$`.
+
+```{.bash filename="scriptv3.sh"}
+#!/bin/bash -l
+
+#$ -P ds549           # Assign to project ds549
+#$ -l h_rt=12:00:00   # Set a hard runtime limit
+#$ -N hello-world     # Give the job a name other than the shell script name
+#$ -j y               # merge the error and regular output into a single file
+
+module load python3/3.12.4
+
+echo "Print python version"
+python --version
+
+python myscript.py
+
+```
+
+Other general job submission directives are listed
+[here](https://www.bu.edu/tech/support/research/system-usage/running-jobs/submitting-jobs/#job-options)
+
+## Requesting Resources
+
+Let's look at how to request particular resources for our job.
+
+Here's simply python code that checks if a GPU is available, and if so 
+transforms a simple tensor into a CUDA tensor.
+
+::: {.callout-note}
+CUDA is the Nvidia GPU driver and software package.
+:::
+
+```{.python filename="cuda-simple.py"}
+import torch
+
+print(f'torch cuda is available: {torch.cuda.is_available()}')
+t = torch.tensor([1, 2, 3])
+
+if torch.cuda.is_available():
+    t = t.cuda()
+
+print(t)
+```
+
+And we create a job submission script that loads the SCC academic ML environment
+and activates it.
+
+```{.python filename="run-cuda-simple.sh"}
+#!/bin/bash -l
+
+#$ -P ds549           # Assign to project ds549
+#$ -j y               # merge the error and regular output into a single file
+
+module load miniconda academic-ml/fall-2024
+
+conda activate fall-2024-pyt
+
+echo "Print python version"
+python --version
+
+python cuda-simple.py
+
+# to be processed correctly there must be a blank line at the end of the file
+
+```
+
+Let's submit two jobs:
+
+One to run on default compute node (no GPU)
+```bash
+$ qsub run-cuda-simple.sh 
+Your job 316551 ("run-cuda-simple.sh") has been submitted
+```
+
+And one job where we request 1 GPU.
+
+```bash
+$ qsub -l gpus=1 run-cuda-simple.sh 
+Your job 316561 ("run-cuda-simple.sh") has been submitted
+```
+
+In this case, it created an output file for each job:
+
+```bash
+ls -ls
+run-cuda-simple.sh.o316551
+run-cuda-simple.sh.o316561
+```
+
+Let's look at the one where we didn't request a GPU.
+
+```{.bash filename="run-cuda-simple.sh.o316551"}
+-------------------------------------------------------------------------------
+To activate the conda environment in a batch script or in a terminal run the
+following command. For interactive sessions in SCC OnDemand place this command
+in the "Pre-Launch Command" field.
+
+To load the PyTorch-based environment run:
+
+    conda activate fall-2024-pyt
+    
+To load the Tensorflow-based environment run:
+
+    conda activate fall-2024-tf
+
+To load the Jax-based environment run:
+
+    conda activate fall-2024-jax
+    
+For information on using or cloning this conda environment visit:
+
+https://www.bu.edu/tech/support/research/software-and-programming/common-languages/python/python-ml/academic-machine-learning-environment
+-------------------------------------------------------------------------------
+
+Print python version
+Python 3.11.9
+torch cuda is available: False
+tensor([1, 2, 3])
+```
+
+And the one where we did.
+
+```{.bash filename="run-cuda-simple.sh.0316561"}
+-------------------------------------------------------------------------------
+To activate the conda environment in a batch script or in a terminal run the
+following command. For interactive sessions in SCC OnDemand place this command
+in the "Pre-Launch Command" field.
+
+To load the PyTorch-based environment run:
+
+    conda activate fall-2024-pyt
+    
+To load the Tensorflow-based environment run:
+
+    conda activate fall-2024-tf
+
+To load the Jax-based environment run:
+
+    conda activate fall-2024-jax
+    
+For information on using or cloning this conda environment visit:
+
+https://www.bu.edu/tech/support/research/software-and-programming/common-languages/python/python-ml/academic-machine-learning-environment
+-------------------------------------------------------------------------------
+
+Print python version
+Python 3.11.9
+torch cuda is available: True
+tensor([1, 2, 3], device='cuda:0')
+```
+
+You can see [here](https://www.bu.edu/tech/support/research/system-usage/running-jobs/submitting-jobs/#job-resources)
+for a more list of resources to specify, but a good example is
+
+```bash
+$ qsub -l gpus=1 -l gpu_c=7.0 -pe omp 8  script.sh
+```
+
+The argument `-l qpu_c=7.0` is the GPU capability requested, which currently is
+one of `[3.5, 5, 6.0, 7.0, 8.6]`.
+
+There's a dedicated page for
+[GPU Computing on the SCC](https://www.bu.edu/tech/support/research/software-and-programming/gpu-computing/).
+
+You can list all installed GPUs with `qgpus`.
+
+## Exploring Queues
+
+You can explore the queues a bit more with the `qselect` command.
+
+We can count the total number of queues:
+
+```bash
+$ qselect | wc -l
+1776
+```
+
+The number of queues with at least one GPU.
+
+```bash
+$ qselect -l gpus=1 | wc -l
+214
+```
+
+We can search for queues with 'cds' in the name: 
+
+```bash
+$ qselect -q *cds*
+cds-m1024-pub@scc-v08.scc.bu.edu
+cds-pub@scc-tb3.scc.bu.edu
+cds-pub@scc-tc4.scc.bu.edu
+cds-pub@scc-ga4.scc.bu.edu
+cds-pub@scc-tb2.scc.bu.edu
+cds-pub@scc-ga3.scc.bu.edu
+cds-pub@scc-tc1.scc.bu.edu
+cds-pub@scc-tc3.scc.bu.edu
+cds-pub@scc-tc2.scc.bu.edu
+cds-gpu-pub@scc-j11.scc.bu.edu
+cds-gpu-pub@scc-305.scc.bu.edu
+cds-gpu-pub@scc-306.scc.bu.edu
+cds-gpu-pub@scc-j13.scc.bu.edu
+cds-gpu-pub@scc-q32.scc.bu.edu
+cds-gpu-pub@scc-j12.scc.bu.edu
+cds-gpu-pub@scc-q31.scc.bu.edu
+cds@scc-tb3.scc.bu.edu
+cds@scc-tc4.scc.bu.edu
+cds@scc-ga4.scc.bu.edu
+cds@scc-tb2.scc.bu.edu
+cds@scc-ga3.scc.bu.edu
+cds@scc-tc1.scc.bu.edu
+cds@scc-tc3.scc.bu.edu
+cds@scc-tc2.scc.bu.edu
+cds-gpu@scc-j11.scc.bu.edu
+cds-gpu@scc-305.scc.bu.edu
+cds-gpu@scc-306.scc.bu.edu
+cds-gpu@scc-j13.scc.bu.edu
+cds-gpu@scc-q32.scc.bu.edu
+cds-gpu@scc-j12.scc.bu.edu
+cds-gpu@scc-q31.scc.bu.edu
+cds-m1024@scc-v08.scc.bu.edu
+```
+
+And the count:
+
+```bash
+$ qselect -q *cds* | wc -l
+32
+```
+
+Of those which have at least 1 GPU and the count:
+
+```bash
+$ qselect -q *cds* -l gpus=1
+cds-gpu-pub@scc-j11.scc.bu.edu
+cds-gpu-pub@scc-305.scc.bu.edu
+cds-gpu-pub@scc-306.scc.bu.edu
+cds-gpu-pub@scc-j13.scc.bu.edu
+cds-gpu-pub@scc-q32.scc.bu.edu
+cds-gpu-pub@scc-j12.scc.bu.edu
+cds-gpu-pub@scc-q31.scc.bu.edu
+cds-gpu@scc-j11.scc.bu.edu
+cds-gpu@scc-305.scc.bu.edu
+cds-gpu@scc-306.scc.bu.edu
+cds-gpu@scc-j13.scc.bu.edu
+cds-gpu@scc-q32.scc.bu.edu
+cds-gpu@scc-j12.scc.bu.edu
+cds-gpu@scc-q31.scc.bu.edu
+
+$ qselect -q *cds* -l gpus=1 | wc -l
+14
+```
+
+
+## Example: CIFAR10 Training on CPU and GPU
+
+Let's put what we learned to use and train a CIFAR10 classifier with and without
+GPUs.
+
+We'll use the CIFAR10 classifer model training code from [python environment notes](./02_python_environments.qmd#python-script)
+but with some instrumentation for timing and GPU support.
+
+It is important to note that you may be assigned 1 GPU on a multi-GPU node. You 
+shouldn't manually assign one of the GPUs.
+
+Per this [note](https://www.bu.edu/tech/support/research/software-and-programming/gpu-computing/#CUDAVISIBLE)
+you can check which GPU you are assigned with
+
+```{.python}
+import os
+print(os.getenv("CUDA_VISIBLE_DEVICES"))
+```
+
+We'll modify our training code to check if CUDA is available and use it if so:
+
+```{.python filename="cifar-train.py"}
+import torch
+import torch.optim as optim
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision
+import torchvision.transforms as transforms
+import time
+
+# Record the start time
+start_time = time.time()
+
+# Check if CUDA is available
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using {device} device')
+
+# Define transformations for the dataset
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+# Download and load the CIFAR-10 dataset
+trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=32, shuffle=True)
+
+testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=32, shuffle=False)
+
+# Classes
+classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+
+# Define the CNN model
+class SmallCNN(nn.Module):
+    def __init__(self):
+        super(SmallCNN, self).__init__()
+        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(32 * 8 * 8, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(-1, 32 * 8 * 8)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Initialize the model, loss function, and optimizer
+model = SmallCNN().to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+# Training the model
+def train_model(model, trainloader, criterion, optimizer, epochs=5):
+    for epoch in range(epochs):  # Loop over the dataset multiple times
+        running_loss = 0.0
+        for i, data in enumerate(trainloader, 0):
+            # Get the inputs; data is a list of [inputs, labels]
+            inputs, labels = data[0].to(device), data[1].to(device)
+
+            # Zero the parameter gradients
+            optimizer.zero_grad()
+
+            # Forward pass
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+
+            # Backward pass and optimize
+            loss.backward()
+            optimizer.step()
+
+            # Print statistics
+            running_loss += loss.item()
+            if i % 100 == 99:    # Print every 100 mini-batches
+                print(f'[Epoch {epoch + 1}, Batch {i + 1}] loss: {running_loss / 100:.3f}')
+                running_loss = 0.0
+
+    print('Finished Training')
+
+    # Using the TorchScript method for model saving
+    # Important! Do not change the following 2 lines of code except for the model name
+    scripted_model = torch.jit.script(model)
+    torch.jit.save(scripted_model, 'cifar10-model.pt')
+
+    print('Model saved as cifar10-model.pt')
+
+# Call the training function
+train_model(model, trainloader, criterion, optimizer)
+
+# Evaluation function to test the accuracy
+def evaluate_model(model, testloader):
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data[0].to(device), data[1].to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+    accuracy = 100 * correct / total
+    print(f'Accuracy of the network on the 10,000 test images: {accuracy:.2f}%')
+    return accuracy
+
+# Call the evaluation function
+evaluate_model(model, testloader)
+
+# Record the end time
+end_time = time.time()
+
+# Calculate the elapsed time
+elapsed_time = end_time - start_time
+minutes, seconds = divmod(elapsed_time, 60)
+
+# Print the elapsed time in minutes and seconds
+print(f"Elapsed time: {int(minutes)} minutes and {seconds:.2f} seconds")
+
+```
+
+with the script
+
+```{.bash filename="run-cifar-train.sh"}
+#!/bin/bash -l
+
+#$ -P ds549           # Assign to project ds549
+#$ -j y               # merge the error and regular output into a single file
+
+module load miniconda academic-ml/fall-2024
+
+conda activate fall-2024-pyt
+
+echo "Print python version"
+python --version
+
+python cifar-train.py
+
+# to be processed correctly there must be a blank line at the end of the file
+
+```
+
+And submit both with and without GPU
+
+```bash
+$ qsub run-cifar-train.sh 
+Your job 317438 ("run-cifar-train.sh") has been submitted
+
+$ qsub -l gpus=1 run-cifar-train.sh 
+Your job 317468 ("run-cifar-train.sh") has been submitted
+```
+
+And let's compare the outputs:
+
+:::: {.columns}
+::: {.column width="50%"}
+
+```{.bash filename="run-cifar-train.sh.o317438 (CPU)"}
+Print python version
+Python 3.11.9
+Using cpu device
+Files already downloaded and verified
+Files already downloaded and verified
+[Epoch 1, Batch 100] loss: 2.299
+[Epoch 1, Batch 200] loss: 2.287
+...
+[Epoch 5, Batch 1400] loss: 1.113
+[Epoch 5, Batch 1500] loss: 1.092
+
+Finished Training
+Model saved as cifar10-model.pt
+
+Accuracy: 60.38%
+
+Elapsed time: 2 minutes and 50.11 seconds
+```
+
+
+:::
+::: {.column width="50%"}
+
+```{.bash filename="run-cifar-train.sh.o317468 (GPU)"}
+Print python version
+Python 3.11.9
+Using cuda device
+Files already downloaded and verified
+Files already downloaded and verified
+[Epoch 1, Batch 100] loss: 2.298
+[Epoch 1, Batch 200] loss: 2.278
+...
+[Epoch 5, Batch 1400] loss: 1.116
+[Epoch 5, Batch 1500] loss: 1.129
+
+Finished Training
+Model saved as cifar10-model.pt
+
+Accuracy: 60.80%
+
+Elapsed time: 0 minutes and 54.14 seconds
+```
+
+:::
+::::
+
+## References
+
+* https://www.bu.edu/tech/support/research/system-usage/running-jobs/submitting-jobs/
+* https://www.bu.edu/tech/support/research/system-usage/running-jobs/tracking-jobs/
+* https://www.bu.edu/tech/support/research/software-and-programming/gpu-computing/
+* https://www.bu.edu/tech/support/research/system-usage/running-jobs/batch-script-examples/
+* https://www.bu.edu/tech/support/research/system-usage/running-jobs/process-reaper/
