@@ -1,0 +1,120 @@
+---
+title: Projects
+---
+
+## AIMpower
+
+* __Client Organization__: [AIMpower.org]()
+* [__Project Description (Google Doc)__](https://docs.google.com/document/d/1d63VZWPitAm4_WIguGdc6LGHw5l10gH5jTZW6tpVLwo/edit)
+* [__Notion Project Board__](https://github.com/BU-Spark/ml-aimpower-stuttered-speech.git)
+* __GitHub Repo__: [https://github.com/BU-Spark/ml-aimpower-stuttered-speech.git](https://github.com/BU-Spark/ml-aimpower-stuttered-speech.git)
+
+__Team__:
+
+
+* Yol-Emma Veillard
+* Wai Yuen Cheng
+* Mary Choe
+* Lingjie Yuan
+
+__Spark Staff__:
+
+* __Spark Project Manager__: Hakob Janesian
+
+## Racist Deeds
+
+* __Client Organization__: Mass Mutual
+* [__Project Description (Google Doc)__](https://docs.google.com/document/d/1Yl1VJY1JFjhUnHfN06OlHRd8PQodni2nBFJhKxlbESk/edit)
+* [__Notion Project Board__](https://www.notion.so/FA24_DS549_MassMutual-Racist-Deeds-10a4cc2b88f180a18b34f539852cbe97?pvs=4)
+* __GitHub Repo__: [https://github.com/BU-Spark/ml-longfellow-land-use-mass.git](https://github.com/BU-Spark/ml-longfellow-land-use-mass.git)
+
+__Team__:
+
+* Jianying Liu
+* Jacob Stein
+* Nathaniel Quisel
+
+__Spark Staff__:
+
+* __Spark Project Manager__: Hakob Janesian
+* __Technical Project Manager__: Xavier Thomas
+
+
+## Boston Public School Policy Help Bot
+
+* __Client Organization__: Boston Public Schools and BU Wheeler
+* [Project Description](https://docs.google.com/document/d/1oY14BYnr2PYGEcsOHd7rguhbIPN28rAo8W9PHcWeJTs/edit)
+* [__Notion Project Board__](https://www.notion.so/FA24_DS549_BU-Hariri-Wheelock-BPS-Policy-Help-Bot-10a4cc2b88f1808d8fe0fb55f06f361a?pvs=4)
+* __GitHub Repo__: [https://github.com/BU-Spark/ml-bps-policy-bot.git](https://github.com/BU-Spark/ml-bps-policy-bot.git)
+
+__Team__:
+
+* Mounika Chowdary Akuraju
+* Abhaya Shukla
+* Duoduo Xu
+* Akshat Gurbuxani
+
+__Spark Staff__:
+
+* __Spark Project Manager__: Hakob Janesian
+* __Technical Project Manager__: Xavier Thomas
+
+
+## Recycle Contamination Identification
+
+* __Client Organization__: Spare-It
+* [Project Description](https://docs.google.com/document/d/1s5nzGVPDrqu2QQExbb1e16dz1a2jFZXWsj8GpZNQqEI/edit)
+* [__Notion Project Board__](https://www.notion.so/FA24_DS549_Spare-It-Contaminated-Identification-10a4cc2b88f180219c28fc79325e9a54?pvs=4)
+* __GitHub Repo__: [https://github.com/BU-Spark/ml-spare-it-contamination.git](https://github.com/BU-Spark/ml-spare-it-contamination.git)
+
+__Team__:
+
+* Tia Hannah
+* Arjun Chandra
+* Heng Chang
+* Devon Solheim
+
+__Spark Staff__:
+
+* __Spark Project Manager__: Tanisq Mallpani
+
+
+## Boston Public Library Multimedia Retrieval
+
+* __Client Organization__: Boston Public Library
+* [Project Description](https://docs.google.com/document/d/1gquDZIPq_C0p8MRelYgEDdcPnS_mJNdQbyXyxk21HtY/edit)
+* [__Notion Project Board__](https://www.notion.so/FA24_DS549_Boston-Public-Library-Retrieval-Augmented-Generation-10a4cc2b88f180a88f5bc29598b4e546?pvs=4)
+* __GitHub Repo__: [https://github.com/BU-Spark/ml-bpl-rag.git](https://github.com/BU-Spark/ml-bpl-rag.git)
+
+__Team__:
+
+* Daniel Foley
+* Enrico Collautti
+* Brandon	Vargus
+* Jinanshi Mehta
+
+__Spark Staff__:
+
+* __Spark Project Manager__: Tanisq Mallpani
+* __Technical Project Manager__: Xavier Thomas
+
+
+## National Lawyer's Guild Predictive Text
+
+* __Client Organization__: National Lawyers Guild -- MA Chapter
+* [Project Description](https://docs.google.com/document/d/1FgZbaRI46Bp3i6ZLee0ZTmdKud4UV8LjB61GaXOmvgE/edit)
+* [__Notion Project Board__](https://www.notion.so/FA24_DS549_National-Lawyers-Guild-MA-Predictive-Text-10a4cc2b88f1801c8280e175936cefbe?pvs=4)
+* __GitHub Repo__: [https://github.com/BU-Spark/ml-nlgma-ia-complaints.git](https://github.com/BU-Spark/ml-nlgma-ia-complaints.git)
+
+__Team__:
+
+* Rohan Anand
+* Matthew Cheng
+* Yewon Lee
+* Abdelazim Lokma
+
+__Spark Staff__:
+
+* __Spark Project Manager__: Tanisq Mallpani
+* __Technical Project Manager__: Xavier Thomas
+

@@ -4,6 +4,7 @@ project:
   render:
     - index.qmd
     - schedule.qmd
+    - projects.qmd
     - 01_command_shells.qmd
     - 02_python_environments.qmd
     - 03_git_github.qmd
@@ -36,7 +37,8 @@ website:
       - href: index.qmd
         text: Home -- Syllabus
       - href: schedule.qmd
-      - section: "Assignments"
+      - href: projects.qmd
+      - section: "Notes"
         contents:
           - href: 01_command_shells.qmd
             text: 01 -- Command Shells
