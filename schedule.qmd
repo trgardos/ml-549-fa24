@@ -136,6 +136,7 @@ title: Schedule
             <ul>
                 <li>How to read a research paper</li>
                 <li>PLC -- Research Phase</li>
+                <li>Lab time</li>
             </ul>
         </td>
         <td><a href="https://docs.google.com/presentation/d/1jQHkgNBut2OG42euEB2JIhqZTrarPMlfgVN0xaMbYVk/edit?usp=sharing">Slides</a></td>
@@ -143,7 +144,12 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Oct 03</td>
-        <td>Lecture description.</td>
+        <td>10 -- Topics
+            <ul>
+                <li>PyTorch Intro (Part 1)</li>
+                <li>Lab time</li>
+            </ul>
+        </td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
