@@ -7,7 +7,7 @@ project:
     - 04_scc.qmd
     - 07_scc_cont.qmd
     - 08_scc_batch_computing.qmd
-    # - 08-B_pytorch_intro.qmd
+    - 10-pytorch-01.qmd
 
 format:
   revealjs:

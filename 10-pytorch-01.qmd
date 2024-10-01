@@ -1,0 +1,303 @@
+---
+title: Introduction to PyTorch, Part 1
+jupyter: python3
+---
+
+## ![](assets/images/pytorch/pytorch.svg){height="48px"} PyTorch Introduction
+
+<a href="https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/_notebooks/10-pytorch-01.ipynb" target="_blank">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
+[PyTorch](https://pytorch.org/) is an open-source machine learning library developed by Facebook's AI Research lab. 
+
+It is widely used for deep learning tasks, particularly in the field of natural language processing (NLP) and computer vision. 
+
+Started at Facebook AI Research (FAIR), now _Fundamntal AI Research_, to build a consolidated tool for deep learning tasks.
+
+* 2015 there was Theano (Montreal) Caffe (Berkeley) and Lua Torch (FAIR).
+* 2015 December, Google released TensorFlow
+* ~2016 Released Caffe2 for targeting mobile and edge devices (Facebook Production)
+* 2015-2016 FAIR refactored Torch to separate computation backend from frontend and create a new frontend in Pythyon
+    * the core library is still called `torch`
+* Sep 2016 PyTorch v0.1.1 released (`torch.nn` and `torch.autograd` modules)
+* Dec 2018 PyTorch v1.0 released (Replace Caffe2 for FB production)
+* Mar 15 2023 PyTorch v2.0 released (dynamic shapes, distributed training, Transformers support, etc.)
+* (Latest Release)Aug 2024 PyTorch 2.4.1 
+
+## Key Features of PyTorch
+
+1. **Dynamic Computation Graph**: PyTorch's dynamic computation graph allows for more intuitive and flexible model 
+   building. This means that the graph is constructed at runtime, allowing for more dynamic and interactive model 
+   development.
+
+2. **GPU and TPU Acceleration**: PyTorch can leverage GPUs and TPUs for accelerated training, making it faster than many 
+   other deep learning frameworks.
+
+3. **Autograd**: PyTorch's autograd module provides automatic differentiation, which allows for easy computation of 
+   gradients and updates to model parameters during training.
+
+4. **High-Level API**: PyTorch has a high-level API that allows for easy model building and training. It also has a low-level 
+   API that provides more control over the model building process.
+
+## PyTorch vs TensorFlow
+
+
+::: {layout-ncol="2"}
+
+![](assets/images/pytorch/num_hf_models_2023.png)
+
+![](assets/images/pytorch/Fraction-of-Papers-Using-PyTorch-vs.-TensorFlow.png)
+
+![](assets/images/pytorch/percentage_repo_2023.png)
+
+:::
+
+From [https://www.assemblyai.com/blog/pytorch-vs-tensorflow-in-2023/](https://www.assemblyai.com/blog/pytorch-vs-tensorflow-in-2023/).
+
+## Key Differences
+
+:::: {.columns}
+::: {.column width="50%"}
+
+### PyTorch
+
+* Dynamic Computation Graph
+* Autograd
+* High-Level API
+* Arguably more "pythonic"
+
+:::
+::: {.column width="50%"}
+
+### TensorFlow
+
+* Static Computation Graph
+* Eager Execution
+* Low-Level API (high-level API is Keras)
+
+:::
+::::
+
+## Tutorial
+
+We'll borrow heavily from [https://pytorch.org/tutorials/](https://pytorch.org/tutorials/)
+and other sources that we'll cite.
+
+## Tensors
+
+Fundamentally, PyTorch [tensor](https://pytorch.org/docs/stable/generated/torch.tensor.html) is a data structure for
+storing matrices and multi-dimensional arrays.
+
+Similar to NumPy's ndarrays.
+
+But it does much more.
+
+* Manages translation to accelerator data formats and hardware memory
+* Stores information needed for _automatic gradient_ (autograd) calculation for parameter updates
+* etc...
+
+``` {python}
+import torch
+import numpy as np
+```
+
+## Tensor Creation
+
+We have to get data into PyTorch tensors before we can operate on them.
+
+There are multiple ways to do that.
+
+**Create directly from a Python list such as this one:**
+
+``` {python}
+data = [[1, 2], [2, 3]]
+print(f"data: {data}")
+print(f"type(data): {type(data)}")
+```
+
+
+**Create the tensor and explore some of its attributes.**
+
+``` {python}
+x_data = torch.tensor(data)
+print(f"x_data: {x_data}")
+print(f"type(x_data): {type(x_data)}")
+print(f"x_data.dtype: {x_data.dtype}")
+print(f"x_data.shape: {x_data.shape}")
+print(f"x_data.device: {x_data.device}")
+print(f"x_data.requires_grad: {x_data.requires_grad}")
+print(f"x_data.is_leaf: {x_data.is_leaf}")
+```
+
+As mentioned, some of the interesting attributes are:
+
+* `x_data.device`: The device where the tensor is stored.
+* `x_data.requires_grad`: Whether the tensor requires gradient computation.
+* `x_data.is_leaf`: Whether the tensor is a leaf node in the computation graph.
+
+We'll get more into these later.
+
+If we use decimal numbers, then a floating point number type is chosen.
+
+``` {python}
+y_data = torch.tensor([[0.1, 1.2], [2.2, 3.1]])
+print(f"y_data: {y_data}")
+print(f"y_data.dtype: {y_data.dtype}")
+print(f"y_data.device: {y_data.device}")
+```
+
+**From a NumPy array**
+
+``` {python}
+np_array = np.array(data)
+x_np = torch.from_numpy(np_array)
+```
+
+**As the same shape of another tensor**
+
+``` {python}
+x_ones = torch.ones_like(x_data) # retains the properties of x_data
+print(f"Ones Tensor: \n {x_ones} \n")
+
+x_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data
+print(f"Random Tensor: \n {x_rand} \n")
+```
+
+
+**With random or constant values**
+
+``` {python}
+shape = (2,3)
+rand_tensor = torch.rand(shape)
+ones_tensor = torch.ones(shape)
+zeros_tensor = torch.zeros(shape)
+
+print(f"Random Tensor: \n {rand_tensor} \n")
+print(f"Ones Tensor: \n {ones_tensor} \n")
+print(f"Zeros Tensor: \n {zeros_tensor}")
+
+```
+
+## Operations on Tensors
+
+The [torch package](https://pytorch.org/docs/stable/torch.html)
+lists all the methods and attributes of tensors.
+
+We'll look at a subset.
+
+**Standard numpy-like indexing and slicing:**
+
+Python itself has some flexible indexing and slicing support. See this
+[tutorial](https://railsware.com/blog/indexing-and-slicing-for-lists-tuples-strings-sequential-types/)
+for a nice overview.
+
+PyTorch follows the NumPy [indexing and slicing](https://numpy.org/doc/stable/user/basics.indexing.html)
+conventions.
+
+```{python}
+# Define a 4x4 tensor
+tensor = torch.tensor([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], dtype=torch.float32)
+#tensor = torch.ones(4, 4)
+print(f"tensor.dtype: {tensor.dtype}")
+
+# Matrices are stored in row-major order, and like NumPy, it is a list of lists.
+print(f"First row: {tensor[0]}")
+print(f"Second row: {tensor[1]}")
+
+print(f"First column: {tensor[:, 0]}")
+print(f"Second column: {tensor[:, 1]}")
+
+# Slicing with `...` is a shortcut for "all remaining dimensions"
+print(f"Last column: {tensor[..., -1]}")
+print(f"Last column: {tensor[:, -1]}")
+
+tensor[:,1] = 0
+print(tensor)
+```
+
+**Joining tensors** You can use `torch.cat` to concatenate a sequence of
+tensors along a given dimension. See also
+[torch.stack](https://pytorch.org/docs/stable/generated/torch.stack.html),
+another tensor joining operator that is subtly different from
+`torch.cat`.
+
+```{python}
+#| collapsed: false
+t1 = torch.cat([tensor, tensor, tensor], dim=1)
+print(t1)
+```
+
+**Matrix Multiplication**
+
+```{python}
+#| collapsed: false
+# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value
+
+# ``tensor.T`` returns the transpose of a tensor
+# '@' is the matrix multiplication operator
+y1 = tensor @ tensor.T
+print(f"y1: {y1}")
+
+# Equivalently, we can call `.matmul` method on the tensor
+y2 = tensor.matmul(tensor.T)
+print(f"y2: {y2}")
+```
+
+```{python}
+# This creates a new tensor with the same shape and type as y1, filled with random numbers from a uniform distribution over [0, 1)
+y3 = torch.rand_like(y1)
+print(f"y3: {y3}")
+
+# This performs matrix multiplication between tensor and its transpose, storing the result in y3
+torch.matmul(tensor, tensor.T, out=y3)
+print(f"y3: {y3}")
+```
+
+**Element-wise Multiplication**
+
+```{python}
+# This computes the element-wise product. z1, z2, z3 will have the same value
+z1 = tensor * tensor
+z2 = tensor.mul(tensor)
+
+z3 = torch.rand_like(tensor)
+torch.mul(tensor, tensor, out=z3)
+```
+
+**Single-element tensors** If you have a one-element tensor, for example
+by aggregating all values of a tensor into one value, you can convert it
+to a Python numerical value using `item()`:
+
+```{python}
+#| collapsed: false
+agg = tensor.sum()
+agg_item = agg.item()
+print(agg_item, type(agg_item))
+```
+
+**In-place operations** Operations that store the result into the
+operand are called in-place. They are denoted by a `_` suffix. For
+example: `x.copy_(y)`, `x.t_()`, will change `x`.
+
+```{python}
+#| collapsed: false
+print(f"{tensor} \n")
+tensor.add_(5)
+print(tensor)
+```
+
+
+::: {.callout-note}
+In-place operations save some memory, but can be problematic when computing derivatives because of an immediate lossof history. Hence, their use is discouraged.
+:::
+
+
+
+## References
+
+- [PyTorch](https://pytorch.org/)
+- [PyTorch Tutorials](https://pytorch.org/tutorials/)
+- [PyTorch Documentation](https://pytorch.org/docs/)
+- [PyTorch GitHub](https://github.com/pytorch/pytorch)
+- [PyTorch Brand Guidelines](https://pytorch.org/assets/brand-guidelines/PyTorch-Brand-Guidelines.pdf)
