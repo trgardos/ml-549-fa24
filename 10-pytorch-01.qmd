@@ -5,9 +5,13 @@ jupyter: python3
 
 ## ![](assets/images/pytorch/pytorch.svg){height="48px"} PyTorch Introduction
 
+<!--
 <a href="https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/_notebooks/10-pytorch-01.ipynb" target="_blank">
 <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
+-->
+
+[![](https://colab.research.google.com/assets/colab-badge.svg){fig-alt="Open in Colab"}](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/_notebooks/10-pytorch-01.ipynb)
 
 [PyTorch](https://pytorch.org/) is an open-source machine learning library developed by Facebook's AI Research lab. 
 
@@ -179,14 +183,16 @@ print(f"Zeros Tensor: \n {zeros_tensor}")
 
 ```
 
+::: {.callout-tip}
+There are many more creation functions listed in [Creation Ops](https://pytorch.org/docs/stable/torch.html#creation-ops)
+for things like sparse tensors, other random number generators, etc.
+:::
+
 ## Operations on Tensors
 
-The [torch package](https://pytorch.org/docs/stable/torch.html)
-lists all the methods and attributes of tensors.
+Let's look at some interesting operations we can perform on tensors.
 
-We'll look at a subset.
-
-**Standard numpy-like indexing and slicing:**
+### Standard numpy-like indexing and slicing
 
 Python itself has some flexible indexing and slicing support. See this
 [tutorial](https://railsware.com/blog/indexing-and-slicing-for-lists-tuples-strings-sequential-types/)
@@ -205,6 +211,7 @@ print(f"tensor.dtype: {tensor.dtype}")
 print(f"First row: {tensor[0]}")
 print(f"Second row: {tensor[1]}")
 
+# Like python we use `:` to index and slice
 print(f"First column: {tensor[:, 0]}")
 print(f"Second column: {tensor[:, 1]}")
 
@@ -212,11 +219,14 @@ print(f"Second column: {tensor[:, 1]}")
 print(f"Last column: {tensor[..., -1]}")
 print(f"Last column: {tensor[:, -1]}")
 
+# There is also broadcasting support
 tensor[:,1] = 0
 print(tensor)
 ```
 
-**Joining tensors** You can use `torch.cat` to concatenate a sequence of
+### Joining tensors
+
+You can use `torch.cat` to concatenate a sequence of
 tensors along a given dimension. See also
 [torch.stack](https://pytorch.org/docs/stable/generated/torch.stack.html),
 another tensor joining operator that is subtly different from
@@ -228,18 +238,31 @@ t1 = torch.cat([tensor, tensor, tensor], dim=1)
 print(t1)
 ```
 
-**Matrix Multiplication**
+
+```{python}
+t2 = torch.cat([tensor, tensor, tensor], dim=0)
+print(t2)
+```
+
+### Matrix Multiplication
+
+Matrix multiplication is a fundamental operation in deep learning and PyTorch provides a number of ways to perform it.
+
+#### Equivalent matrix multiplication operations
+
+There are three different ways shown below.
 
 ```{python}
 #| collapsed: false
 # This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value
 
 # ``tensor.T`` returns the transpose of a tensor
-# '@' is the matrix multiplication operator
+
+# Method 1: Use the '@' matrix multiplication operator
 y1 = tensor @ tensor.T
 print(f"y1: {y1}")
 
-# Equivalently, we can call `.matmul` method on the tensor
+# Method 2: call `.matmul` method on the tensor
 y2 = tensor.matmul(tensor.T)
 print(f"y2: {y2}")
 ```
@@ -249,12 +272,180 @@ print(f"y2: {y2}")
 y3 = torch.rand_like(y1)
 print(f"y3: {y3}")
 
-# This performs matrix multiplication between tensor and its transpose, storing the result in y3
+# Method 3: Call the `torch.matmul` function with the two input operands and the output tensor.
 torch.matmul(tensor, tensor.T, out=y3)
 print(f"y3: {y3}")
 ```
 
-**Element-wise Multiplication**
+There is additional behavior depending on the dimensionality of the tensors.
+
+#### Vector Dot Product
+
+If both tensors are 1-D, then the **vector dot product** is performed.
+
+```{python}
+
+# vector x vector
+tensor1 = torch.randn(3)
+tensor2 = torch.randn(3)
+print(f"tensor1: {tensor1} and tensor2: {tensor2}")
+
+tensor3 = torch.matmul(tensor1, tensor2)
+print(f"tensor3: {tensor3}")
+print(f"tensor3.size(): {tensor3.size()}")
+```
+
+So with 1-D tensors, `torch.matmul` and `torch.dot` are equivalent.
+
+```{python}
+tensor3 = torch.dot(tensor1, tensor2)
+print(f"tensor3: {tensor3}")
+print(f"tensor3.size(): {tensor3.size()}")
+```
+
+#### Matrix-Vector Multiplication
+
+Now let's look at the case where one operand is 1D and the other is 2D.
+
+If the first argument is 2-dimensional and the second argument is 1-dimensional,
+the matrix-vector product is returned.
+
+
+```{python}
+tensor1 = torch.tensor([[1, 2], [3, 4]])
+print(f"Operand 1 --tensor1.size(): {tensor1.size()}")
+print(f"Operand 1 -- tensor1: {tensor1}")
+
+tensor2 = torch.tensor([1, 2])
+print(f"Operand 2 --tensor2.size(): {tensor2.size()}")
+print(f"Operand 2 --tensor2: {tensor2}")
+
+tensor3 = torch.matmul(tensor1, tensor2)
+print(f"Output -- tensor3: {tensor3}")
+print(f"Output -- tensor3.size(): {tensor3.size()}")
+```
+
+So this would be the similar to
+
+```{python}
+# Change tensor2 to be shape (2,1)
+tensor2 = torch.tensor([[1], [2]])
+print(f"Operand 2 -- tensor2.size(): {tensor2.size()}")
+print(f"Operand 2 -- tensor2: {tensor2}")
+
+tensor3 = torch.matmul(tensor1, tensor2)
+print(f"Output -- tensor3: {tensor3}")
+print(f"Output -- tensor3.size(): {tensor3.size()}")
+```
+
+
+If the first argument is 1-dimensional and the second argument is 2-dimensional,
+a 1 is prepended to its dimension for the purpose of the matrix multiply.
+After the matrix multiply, the prepended dimension is removed.
+
+``` {python}
+tensor2 = torch.tensor([1, 2])
+print(f"Operand 1 -- tensor2.size(): {tensor2.size()}")
+print(f"Operand 1 -- tensor2: {tensor2}")
+
+tensor3 = torch.matmul(tensor2, tensor1)
+print(f"Output -- tensor3: {tensor3}")
+print(f"Output -- tensor3.size(): {tensor3.size()}")
+```
+
+which is similar to
+
+``` {python}
+tensor2 = torch.tensor([[1, 2]])
+print(f"Operand 1 -- tensor2.size(): {tensor2.size()}")
+print(f"Operand 1 -- tensor2: {tensor2}")
+
+tensor3 = torch.matmul(tensor2, tensor1)
+print(f"Output -- tensor3: {tensor3}")
+print(f"Output -- tensor3.size(): {tensor3.size()}")
+```
+
+(perhaps delete the next part)
+
+```{python}
+# matrix x vector
+tensor1 = torch.randn(3, 4)
+print(f"tensor1.size(): {tensor1.size()}")
+print(f"tensor1: {tensor1}")
+
+tensor2 = torch.randn(4)
+print(f"tensor2.size(): {tensor2.size()}")
+print(f"tensor2: {tensor2}")
+
+tensor3 = torch.matmul(tensor1, tensor2)
+print(f"tensor3: {tensor3}")
+print(f"tensor3.size(): {tensor3.size()}")
+# torch.Size([3])
+```
+
+
+#### Batched Matrix Multiplication
+
+```{python}
+# batched matrix x broadcasted vector
+tensor1 = torch.randn(10, 3, 4)
+tensor2 = torch.randn(4)
+tensor3 = torch.matmul(tensor1, tensor2)
+print(f"tensor3: {tensor3}")
+print(f"tensor3.size(): {tensor3.size()}")
+# torch.Size([10, 3])
+```
+
+```{python}
+# batched matrix x batched matrix
+tensor1 = torch.randn(10, 3, 4)
+tensor2 = torch.randn(10, 4, 5)
+tensor3 = torch.matmul(tensor1, tensor2)
+print(f"tensor3: {tensor3}")
+print(f"tensor3.size(): {tensor3.size()}")
+# torch.Size([10, 3, 5])
+```
+
+```{python}
+# batched matrix x broadcasted matrix
+tensor1 = torch.randn(10, 3, 4)
+tensor2 = torch.randn(4, 5)
+tensor3 = torch.matmul(tensor1, tensor2)
+print(f"tensor3: {tensor3}")
+print(f"tensor3.size(): {tensor3.size()}")
+# torch.Size([10, 3, 5])
+```
+
+
+#### Experiment to format tensor as LaTeX bmatrix.
+
+```{python}
+# Experiment to format tensor as LaTeX bmatrix
+
+import torch
+from IPython.display import display, Math
+
+# Sample tensor
+tensor = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+
+# Function to format tensor as LaTeX bmatrix
+def tensor_to_latex(tensor):
+    latex_str = "\\begin{bmatrix}\n"
+    for row in tensor:
+        latex_str += " & ".join([f"{val.item():.2f}" for val in row]) + " \\\\\n"
+    latex_str += "\\end{bmatrix}"
+    return latex_str
+
+# Convert tensor to LaTeX-formatted string
+latex_tensor = tensor_to_latex(tensor)
+
+# Render the LaTeX in the Jupyter Notebook
+display(Math(latex_tensor))
+```
+
+
+
+### Element-wise Multiplication
 
 ```{python}
 # This computes the element-wise product. z1, z2, z3 will have the same value
@@ -292,7 +483,33 @@ print(tensor)
 In-place operations save some memory, but can be problematic when computing derivatives because of an immediate lossof history. Hence, their use is discouraged.
 :::
 
+## Fully Connected Layer as Matrix Multiplication
 
+```{python}
+import torch
+
+# Define the input tensor (batch size of 1 for simplicity)
+input_tensor = torch.tensor([[1.0, 2.0, 3.0]])
+
+# Initialize weights and biases for the hidden layer
+weights_hidden = torch.randn(3, 4)  # 3 inputs to 4 hidden nodes
+bias_hidden = torch.randn(4)        # 4 hidden nodes
+
+# Initialize weights and biases for the output layer
+weights_output = torch.randn(4, 2)  # 4 hidden nodes to 2 outputs
+bias_output = torch.randn(2)        # 2 outputs
+
+# Perform matrix multiplication and add biases for the hidden layer
+hidden_layer = torch.matmul(input_tensor, weights_hidden) + bias_hidden
+
+# Apply ReLU activation function
+hidden_layer_activated = torch.relu(hidden_layer)
+
+# Perform matrix multiplication and add biases for the output layer
+output_layer = torch.matmul(hidden_layer_activated, weights_output) + bias_output
+
+print("Output:", output_layer)
+```
 
 ## References
 
