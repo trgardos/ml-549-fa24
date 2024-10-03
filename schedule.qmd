@@ -150,7 +150,7 @@ title: Schedule
                 <li>Lab time</li>
             </ul>
         </td>
-        <td> TBA </td>
+        <td> <a href="10-pytorch-01.qmd">PyTorch Intro (Part 1)</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
         <tr> <!-- ### Week 6 ### -->
