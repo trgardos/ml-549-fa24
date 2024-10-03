@@ -5,13 +5,7 @@ jupyter: python3
 
 ## ![](assets/images/pytorch/pytorch.svg){height="48px"} PyTorch Introduction
 
-<!--
-<a href="https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/_notebooks/10-pytorch-01.ipynb" target="_blank">
-<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
--->
-
-[![](https://colab.research.google.com/assets/colab-badge.svg){fig-alt="Open in Colab"}](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/_notebooks/10-pytorch-01.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/_notebooks/10-pytorch-01.ipynb)
 
 [PyTorch](https://pytorch.org/) is an open-source machine learning library developed by Facebook's AI Research lab. 
 
