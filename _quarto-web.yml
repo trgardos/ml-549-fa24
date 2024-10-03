@@ -11,7 +11,7 @@ project:
     - 04_scc.qmd
     - 07_scc_cont.qmd
     - 08_scc_batch_computing.qmd
-    # - 08-B_pytorch_intro.qmd
+    - 10-pytorch-01.qmd
 
 execute: 
   freeze: auto
@@ -52,8 +52,8 @@ website:
             text: 07 -- SCC Continued
           - href: 08_scc_batch_computing.qmd
             text: 08 SCC Batch Computing
-          #- href: 08-B_pytorch_intro.qmd
-          #  text: 08-B PyTorch Intro
+          - href: 10-pytorch-01.qmd
+            text: 10 PyTorch 01
 
 format:
   html:
