@@ -51,9 +51,9 @@ website:
           - href: 07_scc_cont.qmd
             text: 07 -- SCC Continued
           - href: 08_scc_batch_computing.qmd
-            text: 08 SCC Batch Computing
+            text: 08 -- SCC Batch Computing
           - href: 10-pytorch-01.qmd
-            text: 10 PyTorch 01
+            text: 10 -- PyTorch 01
 
 format:
   html:
