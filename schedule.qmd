@@ -158,14 +158,29 @@ title: Schedule
     </tr>
     <tr   style="background-color: #fcd7e2">
         <td>Tue Oct 8</td>
-        <td><b>Project Definition and Research Presentations</b></td>
+        <td>
+            <b>Project Definition and Research Presentations</b>
+            <ul>
+                <li>2:05 -- 2:15 : AIMpower</li>
+                <li>2:17 -- 2:27 : Racist Deeds </li>
+                <li>2:29 -- 2:39 : BPS Policy Bot </li>
+                <li>2:41 -- 2:51 : Recycling Contamination (Spare-It) </li>
+                <li>2:53 -- 3:03 : BPL Multimedia Search </li>
+                <li>3:05 -- 3:15 : NLG Predictive Text </li>
+            </ul>
+        </td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b> Presentations </td>
     </tr>
     <tr>
         <td>Thu Oct 10</td>
-        <td>Lecture description.</td>
-        <td> TBA </td>
+        <td>
+            <ul>
+                <li>PyTorch Intro (Part 2)</li>
+                <li>Lab time</li>
+            </ul>
+        </td>
+        <td> <a href="10-pytorch-01.qmd">PyTorch Intro (Part 2)</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 7 ### -->
