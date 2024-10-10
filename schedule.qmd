@@ -176,11 +176,11 @@ title: Schedule
         <td>Thu Oct 10</td>
         <td>
             <ul>
-                <li>PyTorch Intro (Part 2)</li>
+                <li>Exploratory Data Analysis</li>
                 <li>Lab time</li>
             </ul>
         </td>
-        <td> <a href="10-pytorch-01.qmd">PyTorch Intro (Part 2)</a> </td>
+        <td> <a href="https://docs.google.com/presentation/d/16Kc-rr_plsG0Yk4YVLtGT762-ZxoSk-K6_Fl2vWdj3w/edit?usp=drive_link">EDA Slides</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 7 ### -->
@@ -192,16 +192,16 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Oct 17</td>
-        <td>Lecture description.</td>
+        <td>Continue PyTorch Intros</td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 8 ### -->
         <td colspan="4"  style="background-color: #d7fcf8"><b>Week 8</b> <i>(Project Week 6 -- PoC)</i></td>
     </tr>
-    <tr  style="background-color: #fcd7e2">
+    <tr>
         <td>Tue Oct 22</td>
-        <td><b>Project EDA Presentations</b></td>
+        <td>Lecture description.</td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b> Presentations </td>
     </tr>
@@ -229,9 +229,19 @@ title: Schedule
     <tr> <!-- ### Week 10 ### -->
         <td colspan="4"  style="background-color: #d7e2fc"><b>Week 10</b> <i>(Project Week 8 -- Deployment)</i></td>
     </tr>
-    <tr>
+    <tr style="background-color: #fcd7e2">
         <td>Tue Nov 5</td>
-        <td>Lecture description.</td>
+        <td>
+            <b>Project EDA and PoC Presentations</b>
+            <ul>
+                <li>2:05 -- 2:15 : NLG Predictive Text </li>
+                <li>2:17 -- 2:27 : BPL Multimedia Search </li>
+                <li>2:29 -- 2:39 : Recycling Contamination (Spare-It) </li>
+                <li>2:41 -- 2:51 : BPS Policy Bot </li>
+                <li>2:53 -- 3:03 : Racist Deeds </li>
+                <li>3:05 -- 3:15 : AIMpower</li>
+            </ul>
+        </td>
         <td>  TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
@@ -295,7 +305,17 @@ title: Schedule
     </tr>
     <tr   style="background-color: #fcd7e2">
         <td>Thu Dec 5</td>
-        <td><b>Project Final Presentations</b></td>
+        <td>
+            <b>Project Final Presentations</b>
+            <ul>
+                <li>2:05 -- 2:15 : Recycling Contamination (Spare-It)</li>
+                <li>2:17 -- 2:27 : BPS Policy Bot</li>
+                <li>2:29 -- 2:39 : BPL Multimedia Search</li>
+                <li>2:41 -- 2:51 : Racist Deeds</li>
+                <li>2:53 -- 3:03 : NLG Predictive Text</li>
+                <li>3:05 -- 3:15 : AIMpower</li>
+            </ul>
+        </td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
@@ -304,7 +324,7 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Dec 10</td>
-        <td>Last class.</td>
+        <td>Last Class: Lab Day and Demo Day Prep</td>
         <td>  TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
