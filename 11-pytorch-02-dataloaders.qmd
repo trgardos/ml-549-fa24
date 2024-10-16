@@ -5,12 +5,12 @@ jupyter: python3
 
 ### Datasets & DataLoaders
 
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/11-pytorch-02-dataloaders.ipynb)
+
 ::: {.callout-note}
 Adapted from [PyTorch Quickstart](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)
 to use CIFAR10 dataset instead of FashionMNIST.
 :::
-
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/11-pytorch-02-dataloaders.ipynb)
 
 * Code for processing data samples can get messy and hard to maintain
 * We ideally want our dataset code to be decoupled from our model training
