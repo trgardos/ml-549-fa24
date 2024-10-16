@@ -1,5 +1,5 @@
 ---
-title: Introduction to PyTorch, Part 1
+title: PyTorch 01 - Tensors
 jupyter: python3
 ---
 
@@ -227,7 +227,6 @@ another tensor joining operator that is subtly different from
 `torch.cat`.
 
 ```{python}
-#| collapsed: false
 t1 = torch.cat([tensor, tensor, tensor], dim=1)
 print(t1)
 ```
@@ -244,32 +243,94 @@ Matrix multiplication is a fundamental operation in deep learning and PyTorch pr
 
 #### Equivalent matrix multiplication operations
 
-There are three different ways shown below.
+We'll use the following helper function to format the tensors as LaTeX matrices.
 
 ```{python}
-#| collapsed: false
-# This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value
+#| code-fold: true
+import torch
+from IPython.display import display, Math
 
-# ``tensor.T`` returns the transpose of a tensor
-
-# Method 1: Use the '@' matrix multiplication operator
-y1 = tensor @ tensor.T
-print(f"y1: {y1}")
-
-# Method 2: call `.matmul` method on the tensor
-y2 = tensor.matmul(tensor.T)
-print(f"y2: {y2}")
+def tensor_to_latex(tensor):
+    """Convert a PyTorch tensor to a LaTeX bmatrix string."""
+    if tensor.dim() == 1:
+        # Convert 1D tensor to a 2D column vector for display
+        tensor = tensor.unsqueeze(1)
+    
+    latex_str = "\\begin{bmatrix}\n"
+    for row in tensor:
+        latex_str += " & ".join([f"{val.item():.2f}" for val in row]) + " \\\\\n"
+    latex_str += "\\end{bmatrix}"
+    return latex_str
 ```
+
+```{python}
+# Define matrix A and vector x
+A = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+x = torch.tensor([5.0, 6.0])
+
+# Compute the product A * x
+Ax = torch.matmul(A, x)
+
+# Convert tensors to LaTeX
+latex_A = tensor_to_latex(A)
+latex_x = tensor_to_latex(x)
+latex_Ax = tensor_to_latex(Ax)
+
+# Display the equation A x = Ax on one line
+display(Math(f"A \\times x = {latex_A} \\times {latex_x} = {latex_Ax}"))
+```
+
+We'll use the tensor from before.
+
+```{python}
+#| code-fold: true
+latex_tensor = tensor_to_latex(tensor)
+display(Math(f"\\mathrm{{tensor}} = {latex_tensor}"))
+```
+
+There are three different ways shown below that produce the same result.
+
+##### **Method 1:** Use the `@` matrix multiplication operator
+
+```{python}
+# ``tensor.T`` returns the transpose of a tensor
+y1 = tensor @ tensor.T
+# print(f"y1: {y1}")
+
+latex_tensorT = tensor_to_latex(tensor.T)
+latex_y1 = tensor_to_latex(y1)
+display(Math(f"y1 = \\mathrm{{tensor}} \\times \\mathrm{{tensor.T}} = {latex_tensor} \\times {latex_tensorT} = {latex_y1}"))
+```
+
+<br>
+
+##### **Method 2:** call `.matmul` method on the tensor
+
+```{python}
+y2 = tensor.matmul(tensor.T)
+# print(f"y2: {y2}")
+
+latex_y2 = tensor_to_latex(y2)
+display(Math(f"y2 = \\mathrm{{tensor}} \\times \\mathrm{{tensor.T}} = {latex_tensor} \\times {latex_tensorT} = {latex_y2}"))
+```
+
+<br>
+
+##### **Method 3:** Call the `torch.matmul` function with the two input operands and the output tensor.
 
 ```{python}
 # This creates a new tensor with the same shape and type as y1, filled with random numbers from a uniform distribution over [0, 1)
 y3 = torch.rand_like(y1)
-print(f"y3: {y3}")
+#print(f"y3: {y3}")
 
-# Method 3: Call the `torch.matmul` function with the two input operands and the output tensor.
 torch.matmul(tensor, tensor.T, out=y3)
-print(f"y3: {y3}")
+# print(f"y3: {y3}")
+
+latex_y3 = tensor_to_latex(y3)
+display(Math(f"y3 = \\mathrm{{torch.matmul(tensor, tensor.T)}} = {latex_tensor} \\times {latex_tensorT} = {latex_y3}"))
 ```
+
+<br>
 
 There is additional behavior depending on the dimensionality of the tensors.
 
@@ -278,22 +339,30 @@ There is additional behavior depending on the dimensionality of the tensors.
 If both tensors are 1-D, then the **vector dot product** is performed.
 
 ```{python}
+torch.manual_seed(0)
 
 # vector x vector
-tensor1 = torch.randn(3)
-tensor2 = torch.randn(3)
-print(f"tensor1: {tensor1} and tensor2: {tensor2}")
+tensor1 = torch.randint(low=0, high=10, size=(3,))
+tensor2 = torch.randint(low=0, high=10, size=(3,))
+# print(f"tensor1: {tensor1} and tensor2: {tensor2}")
+
+latex_tensor1 = tensor_to_latex(tensor1)
+latex_tensor2 = tensor_to_latex(tensor2)
+
+display(Math(f"\\mathrm{{tensor1}} = {latex_tensor1}, \\mathrm{{tensor2}} = {latex_tensor2}"))
+
 
 tensor3 = torch.matmul(tensor1, tensor2)
-print(f"tensor3: {tensor3}")
+print(f"tensor3 = tensor1 @ tensor2: {tensor3}")
 print(f"tensor3.size(): {tensor3.size()}")
+
 ```
 
 So with 1-D tensors, `torch.matmul` and `torch.dot` are equivalent.
 
 ```{python}
 tensor3 = torch.dot(tensor1, tensor2)
-print(f"tensor3: {tensor3}")
+print(f"tensor3 = torch.dot(tensor1, tensor2): {tensor3}")
 print(f"tensor3.size(): {tensor3.size()}")
 ```
 
@@ -308,15 +377,21 @@ the matrix-vector product is returned.
 ```{python}
 tensor1 = torch.tensor([[1, 2], [3, 4]])
 print(f"Operand 1 --tensor1.size(): {tensor1.size()}")
-print(f"Operand 1 -- tensor1: {tensor1}")
+# print(f"Operand 1 -- tensor1: {tensor1}")
+latex_tensor1 = tensor_to_latex(tensor1)
 
 tensor2 = torch.tensor([1, 2])
 print(f"Operand 2 --tensor2.size(): {tensor2.size()}")
-print(f"Operand 2 --tensor2: {tensor2}")
+#print(f"Operand 2 --tensor2: {tensor2}")
+
+latex_tensor2 = tensor_to_latex(tensor2)
 
 tensor3 = torch.matmul(tensor1, tensor2)
-print(f"Output -- tensor3: {tensor3}")
+#print(f"Output -- tensor3: {tensor3}")
 print(f"Output -- tensor3.size(): {tensor3.size()}")
+
+latex_tensor3 = tensor_to_latex(tensor3)
+display(Math(f"\\mathrm{{tensor3}} = \\mathrm{{tensor1}} \\times \\mathrm{{tensor2}} = {latex_tensor1} \\times {latex_tensor2} = {latex_tensor3}"))
 ```
 
 So this would be the similar to
@@ -332,6 +407,7 @@ print(f"Output -- tensor3: {tensor3}")
 print(f"Output -- tensor3.size(): {tensor3.size()}")
 ```
 
+But note the difference in the size of the output.
 
 If the first argument is 1-dimensional and the second argument is 2-dimensional,
 a 1 is prepended to its dimension for the purpose of the matrix multiply.
@@ -359,84 +435,78 @@ print(f"Output -- tensor3: {tensor3}")
 print(f"Output -- tensor3.size(): {tensor3.size()}")
 ```
 
-(perhaps delete the next part)
+
+#### Batched Matrix Multiplication
+
+It is very common to have a "batch" of inputs to a neural network, where maybe
+the input to the network is a 3x4 matrix, but PyTorch optimizes the computation
+to process an entire batch of matrices at once.
+
+![Batches of size 5](assets/images/pytorch/batches.png){fig-align="center"}
+
+PyTorch follows the following broadcast conventions.
+
+##### Batched Matrix x Broadcasted Vector
+In the next example, we have batches of 5 matrices, each of size 3x4, and we
+multiply each by a vector of size 4.
+
+So $[5\times3\times4] @ [4\times1] = [5\times3\times1]$.
 
 ```{python}
-# matrix x vector
-tensor1 = torch.randn(3, 4)
+# batched matrix x broadcasted vector
+tensor1 = torch.randint(low=0, high=10, size=(5, 3, 4))
 print(f"tensor1.size(): {tensor1.size()}")
 print(f"tensor1: {tensor1}")
 
-tensor2 = torch.randn(4)
+tensor2 = torch.randint(low=0, high=10, size=(4,))
 print(f"tensor2.size(): {tensor2.size()}")
 print(f"tensor2: {tensor2}")
 
 tensor3 = torch.matmul(tensor1, tensor2)
-print(f"tensor3: {tensor3}")
+print(f"tensor3 = torch.matmul(tensor1, tensor2): {tensor3}")
 print(f"tensor3.size(): {tensor3.size()}")
-# torch.Size([3])
+
+latex_tensor3 = tensor_to_latex(tensor3)
+display(Math(f"\\mathrm{{tensor3}} = {latex_tensor3}"))
 ```
 
 
-#### Batched Matrix Multiplication
+##### Batched Matrix x Batched Matrix
+What about if we multiply two batched matrices?
 
-```{python}
-# batched matrix x broadcasted vector
-tensor1 = torch.randn(10, 3, 4)
-tensor2 = torch.randn(4)
-tensor3 = torch.matmul(tensor1, tensor2)
-print(f"tensor3: {tensor3}")
-print(f"tensor3.size(): {tensor3.size()}")
-# torch.Size([10, 3])
-```
+For example $[5\times3\times4] @ [5\times4\times5] = [5\times3\times5]$.
 
 ```{python}
 # batched matrix x batched matrix
-tensor1 = torch.randn(10, 3, 4)
-tensor2 = torch.randn(10, 4, 5)
+tensor1 = torch.randint(low=0, high=10, size=(5, 3, 4))
+print(f"tensor1.size(): {tensor1.size()}")
+print(f"tensor1: {tensor1}")
+
+tensor2 = torch.randint(low=0, high=10, size=(5, 4, 5))
+print(f"tensor2.size(): {tensor2.size()}")
+print(f"tensor2: {tensor2}")
+
 tensor3 = torch.matmul(tensor1, tensor2)
-print(f"tensor3: {tensor3}")
+print(f"tensor3 = torch.matmul(tensor1, tensor2): {tensor3}")
 print(f"tensor3.size(): {tensor3.size()}")
 # torch.Size([10, 3, 5])
 ```
+
+So we multiply the first matrix in the first batch by the first matrix in the second batch.
+
+
+##### Batched Matrix x Broadcasted Matrix
+
+And here we have $[5\times3\times4] @ [4\times5] = [5\times3\times5]$.
 
 ```{python}
 # batched matrix x broadcasted matrix
-tensor1 = torch.randn(10, 3, 4)
-tensor2 = torch.randn(4, 5)
+tensor1 = torch.randint(low=0, high=10, size=(5, 3, 4))
+tensor2 = torch.randint(low=0, high=10, size=(4, 5))
 tensor3 = torch.matmul(tensor1, tensor2)
 print(f"tensor3: {tensor3}")
 print(f"tensor3.size(): {tensor3.size()}")
-# torch.Size([10, 3, 5])
 ```
-
-
-#### Experiment to format tensor as LaTeX bmatrix.
-
-```{python}
-# Experiment to format tensor as LaTeX bmatrix
-
-import torch
-from IPython.display import display, Math
-
-# Sample tensor
-tensor = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
-
-# Function to format tensor as LaTeX bmatrix
-def tensor_to_latex(tensor):
-    latex_str = "\\begin{bmatrix}\n"
-    for row in tensor:
-        latex_str += " & ".join([f"{val.item():.2f}" for val in row]) + " \\\\\n"
-    latex_str += "\\end{bmatrix}"
-    return latex_str
-
-# Convert tensor to LaTeX-formatted string
-latex_tensor = tensor_to_latex(tensor)
-
-# Render the LaTeX in the Jupyter Notebook
-display(Math(latex_tensor))
-```
-
 
 
 ### Element-wise Multiplication
@@ -455,7 +525,6 @@ by aggregating all values of a tensor into one value, you can convert it
 to a Python numerical value using `item()`:
 
 ```{python}
-#| collapsed: false
 agg = tensor.sum()
 agg_item = agg.item()
 print(agg_item, type(agg_item))
@@ -466,7 +535,6 @@ operand are called in-place. They are denoted by a `_` suffix. For
 example: `x.copy_(y)`, `x.t_()`, will change `x`.
 
 ```{python}
-#| collapsed: false
 print(f"{tensor} \n")
 tensor.add_(5)
 print(tensor)
@@ -474,7 +542,7 @@ print(tensor)
 
 
 ::: {.callout-note}
-In-place operations save some memory, but can be problematic when computing derivatives because of an immediate lossof history. Hence, their use is discouraged.
+In-place operations save some memory, but can be problematic when computing derivatives because of an immediate loss of history. Hence, their use is discouraged.
 :::
 
 ## Fully Connected Layer as Matrix Multiplication
@@ -484,7 +552,7 @@ with 3 inputs, 4 hidden nodes and 2 outputs.
 
 ![Deep Fully Connected Network](assets/images/pytorch/shallow_net.png)
 
-We can express this network as a matrix multiplication.
+For example, we can express the hidden layer of this network as a matrix multiplication.
 
 $$
 \begin{bmatrix}
@@ -518,6 +586,8 @@ Which we can compute directly on tensors.
 ```{python}
 import torch
 
+torch.manual_seed(42)
+
 # Define the input tensor (batch size of 1 for simplicity)
 input_tensor = torch.tensor([[1.0, 2.0, 3.0]])
 
@@ -541,405 +611,81 @@ output_layer = torch.matmul(hidden_layer_activated, weights_output) + bias_outpu
 print("Output:", output_layer)
 ```
 
-## Datasets and DataLoaders
+Let's look at the matrix equations.
 
-Adapted from [PyTorch Dataloader Tutorial](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)
-to use CIFAR10 instead of Fashion MNIST.
+Here's the calculation of the hidden layer.
 
 ```{python}
-#| collapsed: false
-%matplotlib inline
+#| code-fold: true
+latex_input_tensor = tensor_to_latex(input_tensor.T)
+latex_weights_hidden = tensor_to_latex(weights_hidden.T)
+latex_bias_hidden = tensor_to_latex(bias_hidden)
+latex_weights_output = tensor_to_latex(weights_output.T)
+latex_bias_output = tensor_to_latex(bias_output)
+latex_hidden_layer = tensor_to_latex(hidden_layer.T)
+latex_hidden_layer_activated = tensor_to_latex(hidden_layer_activated.T)
+latex_output_layer = tensor_to_latex(output_layer.T)
+
+# display(Math(f"\\text{{input tensor}} = {latex_input_tensor}"))
+# display(Math(f"\\text{{weights hidden}} = {latex_weights_hidden}"))
+# display(Math(f"\\text{{bias hidden}} = {latex_bias_hidden}"))
+# display(Math(f"\\text{{weights output}} = {latex_weights_output}"))
+# display(Math(f"\\text{{bias output}} = {latex_bias_output}"))
+# display(Math(f"\\text{{hidden layer}} = {latex_hidden_layer}"))
+# display(Math(f"\\text{{hidden layer activated}} = {latex_hidden_layer_activated}"))
+# display(Math(f"\\text{{output layer}} = {latex_output_layer}"))
+
+display(Math(f"{latex_weights_hidden} \\times {latex_input_tensor} + {latex_bias_hidden} = {latex_hidden_layer}"))
 ```
 
-
-### Datasets & DataLoaders
-
-Code for processing data samples can get messy and hard to maintain; we
-ideally want our dataset code to be decoupled from our model training
-code for better readability and modularity. 
-
-PyTorch provides two data
-primitives: 
-
-1. `torch.utils.data.DataLoader` and 
-2. `torch.utils.data.Dataset`
-
-that allow you to use pre-loaded datasets as well as your own data.
-
-* `Dataset` stores the samples and their corresponding labels, and
-* `DataLoader` wraps an iterable around the `Dataset` to enable easy
-   access to the samples.
-
-::: {.callout-note}
-An **iterable** is a Python object capable of returning its members one at a time.
-It must implement the `__iter__` method or the `__getitem__` method. See
-[Iterators](https://docs.python.org/3/tutorial/classes.html#iterators)
-for more details.
-:::
-
-PyTorch domain libraries provide a number of pre-loaded datasets (such
-as FashionMNIST or CIFAR10) that subclass `torch.utils.data.Dataset` and implement
-functions specific to the particular data. They can be used to prototype
-and benchmark your model. You can find them here:
-
-* [Image Datasets](https://pytorch.org/vision/stable/datasets.html)
-* [Text Datasets](https://pytorch.org/text/stable/datasets.html)
-* [Audio Datasets](https://pytorch.org/audio/stable/datasets.html)
-
-
-### Loading a Dataset
-
-Here is an example of how to load the
-[CIFAR10](https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html#torchvision.datasets.CIFAR10)
-dataset from TorchVision.
-
-We load the
-[CIFAR10](https://pytorch.org/vision/stable/generated/torchvision.datasets.CIFAR10.html#torchvision.datasets.CIFAR10) 
-with the following parameters:
-
-- `root` is the path where the train/test data is stored,
-- `train` specifies training or test dataset,
-- `download=True` downloads the data from the internet if it's
-   not available at `root`.
-- `transform` and `target_transform` specify the feature and label
-   transformations. More on that later.
+Then we apply the ReLU activation function.
 
 ```{python}
-#| collapsed: false
+#| code-fold: true
+display(Math(f"\\mathrm{{ReLU}}({latex_hidden_layer}) = {latex_hidden_layer_activated}"))
+```
+
+And finally we calculate the output linear layer.
+
+```{python}
+#| code-fold: true
+display(Math(f"{latex_weights_output} \\times {latex_hidden_layer_activated} + {latex_bias_output} = {latex_output_layer}"))
+```
+
+### Fully Connected Layer with Batched Input
+
+With no change to the previous code, we can now process a batch of inputs.
+
+```{python}
 import torch
-from torch.utils.data import Dataset
-from torchvision import datasets
-from torchvision.transforms import ToTensor
-import matplotlib.pyplot as plt
 
-training_data = datasets.CIFAR10(
-    root="data",
-    train=True,
-    download=True,
-    transform=ToTensor()
-)
+torch.manual_seed(42)
 
-test_data = datasets.CIFAR10(
-    root="data",
-    train=False,
-    download=True,
-    transform=ToTensor()
-)
+# Define the input tensor (batch size of 5)
+input_tensor = torch.tensor([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0], [10.0, 11.0, 12.0], [13.0, 14.0, 15.0]])
+
+#vvvv The code below is the same as above ^^^^^
+
+# Initialize weights and biases for the hidden layer
+weights_hidden = torch.randn(3, 4)  # 3 inputs to 4 hidden nodes
+bias_hidden = torch.randn(4)        # 4 hidden nodes
+
+# Initialize weights and biases for the output layer
+weights_output = torch.randn(4, 2)  # 4 hidden nodes to 2 outputs
+bias_output = torch.randn(2)        # 2 outputs
+
+# Perform matrix multiplication and add biases for the hidden layer
+hidden_layer = torch.matmul(input_tensor, weights_hidden) + bias_hidden
+
+# Apply ReLU activation function
+hidden_layer_activated = torch.relu(hidden_layer)
+
+# Perform matrix multiplication and add biases for the output layer
+output_layer = torch.matmul(hidden_layer_activated, weights_output) + bias_output
+
+print("Output:", output_layer)
 ```
 
-In this case we use simply the [ToTensor](https://pytorch.org/vision/main/generated/torchvision.transforms.ToTensor.html)
-transform which converts the image from
-a (H x W x C) shape to a (C x H x W) shape and converts the pixel values from
-[0,255] to a torch.FloatTensor in the range [0.0, 1.0].
-
-```{python}
-#| collapsed: false
-img, label = training_data[0]
-print(f"img.shape: {img.shape}")
-print(f"img.dtype: {img.dtype}")
-```
-
-### Iterating and Visualizing the Dataset
-
-It's very important to understand the data you're working with. Visually inspecting
-the dataset is a good way to get started.
-
-We can index `Datasets` manually like a list: `training_data[index]`. In this
-case we randomly sample images from the dataset.
-
-We use `matplotlib` to visualize some samples in our training data.
-
-```{python}
-#| collapsed: false
-
-labels_map = {
-    0: "plane",
-    1: "car",
-    2: "bird",
-    3: "cat",
-    4: "deer",
-    5: "dog",
-    6: "frog",
-    7: "horse",
-    8: "ship",
-    9: "truck",
-}
-
-figure = plt.figure(figsize=(6, 6))
-cols, rows = 4, 4
-
-for i in range(1, cols * rows + 1):
-    # Randomly choose indices
-    sample_idx = torch.randint(len(training_data), size=(1,)).item()
-
-    img, label = training_data[sample_idx]
-    #print(f"img.shape: {img.shape}")
-    #print(f"label: {label}")
-    
-    figure.add_subplot(rows, cols, i)
-    plt.title(labels_map[label])
-    plt.axis("off")
-    plt.imshow(img.permute(1, 2, 0))
-plt.show()
-```
-
-::: {.callout-tip}
-Try re-running the above cell a few times to see different samples from the dataset.
-:::
-
-
-### Collecting Sample Data to Illustrate Custom Dataset
-
-To illustrate creating a custom dataset, we will collect images from the CIFAR10
-dataset and save them to a local directory. We will also save the labels to a CSV
-file.
-
-```{python}
-import os
-import pandas as pd
-from torchvision import datasets
-from torchvision.transforms import ToTensor
-from PIL import Image
-
-# Create directories to store images and annotations
-os.makedirs('cifar10_images', exist_ok=True)
-annotations_file = 'cifar10_annotations.csv'
-
-# Load CIFAR10 dataset
-cifar10 = datasets.CIFAR10(root='data', train=True, download=True, transform=ToTensor())
-
-# Number of images to download
-n_images = 10
-
-# Store images and their labels
-data = []
-for i in range(n_images):
-    img, label = cifar10[i]
-    img = img.permute(1, 2, 0)  # Convert from (C, H, W) to (H, W, C)
-    img = (img * 255).byte().numpy()  # Convert to numpy array and scale to [0, 255]
-    img = Image.fromarray(img)  # Convert to PIL Image
-
-    img_filename = f'cifar10_images/img_{i}.png'
-    img.save(img_filename)  # Save image
-
-    data.append([img_filename, label])  # Append image path and label to data list
-
-# Write annotations to CSV file
-df = pd.DataFrame(data, columns=['image_path', 'label'])
-df.to_csv(annotations_file, index=False)
-
-print(f"Saved {n_images} images and their labels to {annotations_file}")
-```
-
-``` {python}
-# List the directory `cifar_images
-import os
-os.listdir('cifar10_images')
-```
-
-```{python}
-import pandas as pd
-
-# Read the annotations file
-annotations = pd.read_csv('cifar10_annotations.csv')
-
-# Display the first 10 lines of the annotations file
-print(annotations.head(10))
-```
-
-### Creating a Custom Dataset for your files
-
-A custom Dataset class must implement three functions:
-
-1. `__init__`, 
-2. `__len__`, and 
-3. `__getitem__`. 
-
-We'll look at an example implementation.
-
-The CIFAR10 images are stored in a directory and their labels are stored
-separately in a CSV file.
-
-In the next sections, we'll break down what's happening in each of
-these functions.
-
-```{python}
-#| collapsed: false
-import os
-import pandas as pd
-import torch
-from torch.utils.data import Dataset
-from torchvision.io import read_image
-
-class CustomImageDataset(Dataset):
-    def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):
-        self.img_labels = pd.read_csv(annotations_file)
-        self.img_dir = img_dir
-        self.transform = transform
-        self.target_transform = target_transform
-
-    def __len__(self):
-        return len(self.img_labels)
-
-    def __getitem__(self, idx):
-        # img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
-        img_path = self.img_labels.iloc[idx, 0]
-        print(f"img_path: {img_path}")
-
-        image = read_image(img_path)
-        print(f"image.shape: {image.shape}")
-        print(f"image.dtype: {image.dtype}")
-
-        label = self.img_labels.iloc[idx, 1]
-        print(f"label: {label}")
-
-        if self.transform:
-            print(self.transform)
-
-            image = self.transform(image)
-        if self.target_transform:
-            label = self.target_transform(label)
-        return image, label
-```
-
-
-Let's try to use it.
-
-``` {python}
-from torchvision.transforms import ToTensor
-
-mydataset = CustomImageDataset(annotations_file='cifar10_annotations.csv', img_dir='cifar10_images') # , transform=ToTensor())
-
-img, label = mydataset[0]
-print(f"img.shape: {img.shape}")
-print(f"label: {label}")
-
-```
-
-
-``` {python}
-import matplotlib.pyplot as plt
-
-figure = plt.figure(figsize=(6, 6))
-cols, rows = 2, 2
-
-for i in range(1, cols * rows + 1):
-    # Randomly choose indices
-    sample_idx = torch.randint(len(mydataset), size=(1,)).item()
-
-    img, label = mydataset[sample_idx]
-    #print(f"img.shape: {img.shape}")
-    #print(f"label: {label}")
-    
-    figure.add_subplot(rows, cols, i)
-    plt.title(labels_map[label])
-    plt.axis("off")
-    plt.imshow(img.permute(1, 2, 0))
-plt.show()
-```
-
-
-### `__init__`
-
-The `__init__` function is run once when instantiating the Dataset
-object. We initialize the directory containing the images, the
-annotations file, and both transforms (covered in more detail in the
-next section).
-
-The labels.csv file looks like: :
-
-    tshirt1.jpg, 0
-    tshirt2.jpg, 0
-    ......
-    ankleboot999.jpg, 9
-
-```{python}
-#| collapsed: false
-def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):
-    self.img_labels = pd.read_csv(annotations_file)
-    self.img_dir = img_dir
-    self.transform = transform
-    self.target_transform = target_transform
-```
-
-### `__len__`
-
-The [\_\_len\_\_]() function returns the number of samples in our dataset.
-
-Example:
-
-```{python}
-#| collapsed: false
-def __len__(self):
-    return len(self.img_labels)
-```
-
-### `__getitem__`
-
-The [\_\_getitem\_\_]() function loads and returns a sample from the dataset
-at the given index `idx`. Based on the index, it identifies the image\'s
-location on disk, converts that to a tensor using `read_image`,
-retrieves the corresponding label from the csv data in
-`self.img_labels`, calls the transform functions on them (if
-applicable), and returns the tensor image and corresponding label in a
-tuple.
-
-```{python}
-#| collapsed: false
-def __getitem__(self, idx):
-    img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
-    image = read_image(img_path)
-    label = self.img_labels.iloc[idx, 1]
-    if self.transform:
-        image = self.transform(image)
-    if self.target_transform:
-        label = self.target_transform(label)
-    return image, label
-```
-
-------------------------------------------------------------------------
-
-### Preparing your data for training with DataLoaders
-
-The `Dataset` retrieves our dataset's features and labels one sample at
-a time. While training a model, we typically want to pass samples in
-"minibatches", reshuffle the data at every epoch to reduce model
-overfitting, and use Python's `multiprocessing` to speed up data
-retrieval.
-
-`DataLoader` is an iterable that abstracts this complexity for us in an
-easy API.
-
-```{python}
-#| collapsed: false
-from torch.utils.data import DataLoader
-
-train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
-```
-
-### Iterate through the DataLoader
-
-We have loaded that dataset into the `DataLoader` and can iterate
-through the dataset as needed. Each iteration below returns a batch of
-`train_features` and `train_labels` (containing `batch_size=64` features
-and labels respectively). Because we specified `shuffle=True`, after we
-iterate over all batches the data is shuffled (for finer-grained control
-over the data loading order, take a look at
-[Samplers](https://pytorch.org/docs/stable/data.html#data-loading-order-and-sampler)).
-
-```{python}
-#| collapsed: false
-# Display image and label.
-train_features, train_labels = next(iter(train_dataloader))
-print(f"Feature batch shape: {train_features.size()}")
-print(f"Labels batch shape: {train_labels.size()}")
-img = train_features[0].squeeze()
-label = train_labels[0]
-plt.imshow(img.permute(1, 2, 0))
-plt.show()
-print(f"Label: {label}")
-```
 
 ------------------------------------------------------------------------
 
