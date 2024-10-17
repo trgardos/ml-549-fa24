@@ -541,6 +541,25 @@ plt.rcParams["savefig.bbox"] = 'tight'
 from torchvision.transforms import v2
 from torchvision.io import read_image
 
+import os
+import urllib.request
+import zipfile
+
+# Check if the directory exists
+if not os.path.exists('transform_v2_files'):
+    # Download the zip file
+    url = 'https://github.com/trgardos/ml-549-fa24/raw/refs/heads/main/transform_v2_files.zip?download='
+    zip_path = 'transform_v2_files.zip'
+    urllib.request.urlretrieve(url, zip_path)
+    
+    # Unzip the file
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall('.')
+    
+    # Remove the zip file
+    os.remove(zip_path)
+
+
 torch.manual_seed(1)
 
 from transform_v2_files.transforms.helpers import plot
