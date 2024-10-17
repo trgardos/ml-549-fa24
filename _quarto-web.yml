@@ -12,6 +12,7 @@ project:
     - 07_scc_cont.qmd
     - 08_scc_batch_computing.qmd
     - 10-pytorch-01.qmd
+    - 11-pytorch-02-dataloaders.qmd
 
 execute: 
   freeze: auto
@@ -53,11 +54,14 @@ website:
           - href: 08_scc_batch_computing.qmd
             text: 08 -- SCC Batch Computing
           - href: 10-pytorch-01.qmd
-            text: 10 -- PyTorch 01
+            text: 10 -- PyTorch 01 - Intro and Tensors
+          - href: 11-pytorch-02-dataloaders.qmd
+            text: 11 -- PyTorch 02 - Dataloaders and Transforms
 
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
+    toc-depth: 5
     code-fold: false

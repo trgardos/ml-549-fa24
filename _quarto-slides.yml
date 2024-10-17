@@ -8,7 +8,7 @@ project:
     - 07_scc_cont.qmd
     - 08_scc_batch_computing.qmd
     - 10-pytorch-01.qmd
-
+    - 11-pytorch-02-dataloaders.qmd
 format:
   revealjs:
     footer: "DS549 -- Gardos"
