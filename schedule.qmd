@@ -192,8 +192,13 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Oct 17</td>
-        <td>Continue PyTorch Intros</td>
-        <td> TBA </td>
+        <td>
+            <ul>
+                <li>11 -- PyTorch 02: Dataloaders and Transforms</li>
+                <li>Lab time</li>
+            </ul>
+        </td>
+        <td> <a href="11-pytorch-02-dataloaders.qmd">Dataloaders and Transforms</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 8 ### -->
