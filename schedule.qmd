@@ -176,7 +176,7 @@ title: Schedule
         <td>Thu Oct 10</td>
         <td>
             <ul>
-                <li>Exploratory Data Analysis</li>
+                <li>11 -- Exploratory Data Analysis</li>
                 <li>Lab time</li>
             </ul>
         </td>
@@ -194,11 +194,11 @@ title: Schedule
         <td>Thu Oct 17</td>
         <td>
             <ul>
-                <li>11 -- PyTorch 02: Dataloaders and Transforms</li>
+                <li>12 -- PyTorch 02: Dataloaders and Transforms</li>
                 <li>Lab time</li>
             </ul>
         </td>
-        <td> <a href="11-pytorch-02-dataloaders.qmd">Dataloaders and Transforms</a> </td>
+        <td> <a href="12-pytorch-02-dataloaders.qmd">Dataloaders and Transforms</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 8 ### -->
@@ -206,8 +206,18 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Oct 22</td>
-        <td>Lecture description.</td>
-        <td> TBA </td>
+        <td>
+            <ul>
+                <li>13 -- PLC Phase 04: PoC</li>
+                <li>PyTorch 03: Model Definition</li>
+                <li>Lab time</li>
+            </ul>
+        </td>
+        <td> 
+            <ul>
+                <li><a href="https://docs.google.com/presentation/d/1gLtFZAz-Yckkp9FLuY7o4CJH4uO_JBDXcE_iBpxlOTg/edit?usp=sharing">PLC Phase 04: PoC</a> </li>
+                <li><a href="13-pytorch-03-model-def.qmd">PyTorch 03: Model Definition</a> </li>
+        </td>
         <td><b>Assigned:</b>  <br><b>Due:</b> Presentations </td>
     </tr>
     <tr>
