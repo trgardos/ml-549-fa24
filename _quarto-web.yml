@@ -14,8 +14,10 @@ project:
     - 10-pytorch-01.qmd
     - 12-pytorch-02-dataloaders.qmd
     - 13-pytorch-03-model-def.qmd
+
 execute: 
   freeze: auto
+  # cache: true
 
 website:
   title: "CS/DS 549 Spark! Machine Learning Practicum"
