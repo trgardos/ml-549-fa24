@@ -27,7 +27,7 @@ A neural network is a module itself that consists of other modules
 architectures easily.
 
 In the following sections, we'll build a neural network to classify
-images in the **CIFAR-10** dataset.
+images like those in the **CIFAR-10** dataset.
 
 ```{python}
 #| code-fold: true
@@ -98,8 +98,12 @@ model = NeuralNetwork().to(device)
 print(model)
 ```
 
-Keras has a nicer way to print the model architecture. To do something similar ::: {.incremental}
-PyTorch, you can use `torchinfo` package.
+::: {.callout-note}
+Note that this is an _untrained_ model with randomly initialized weights.
+:::
+
+Keras has a nicer way to print the model architecture. To do something similar
+in PyTorch, you can use `torchinfo` package.
 
 ```{python}
 #| echo: false
@@ -127,23 +131,39 @@ This executes the model's `forward`.
 Do not call `model.forward()` directly!
 :::
 
+```{python}
+#| code-fold: false
+X = torch.rand(1, 3, 32, 32, device=device)
+logits = model(X)
+# print(f"Logits: {logits.T}")
+print(f"Logits size: {logits.size()}")
+```
+
 Calling the model on the input returns a $1\times10$ tensor
 corresponding to each output of 10 raw predicted values for each class
+
+::: {.callout-note}
+Note that we had to set the batch size to 1 on the input, e.g. a $1\times3\times32\times32$ tensor.
+
+That's because `nn.Flatten` is batch aware, i.e. it flattens each image in the batch individually.
+:::
 
 We get the prediction probabilities by passing it through an instance of the
 `nn.Softmax` module.
 
 ```{python}
 #| code-fold: false
-X = torch.rand(1, 3, 32, 32, device=device)
-logits = model(X)
-# print(f"Logits: {logits.T}")
-
 pred_probab = nn.Softmax(dim=1)(logits)
 # print(f"\nPredicted probabilities: {pred_probab.T}")
+```
 
+And then we get the predicted class by choosing the index with the maximum
+probability.
+
+```{python}
+#| code-fold: false
 y_pred = pred_probab.argmax(1)
-print(f"\nPredicted class: {y_pred}")
+print(f"Predicted class: {y_pred}")
 ```
 
 ```{python}
@@ -166,15 +186,13 @@ latex_pred_probab = tensor_to_latex(pred_probab.T)
 display(Math(f"\\mathrm{{logits}} = {latex_logits}, \\quad \\mathrm{{pred\\_probab}} = {latex_pred_probab}"))
 ```
 
-Note that we had to set the batch size to 1 on the input, e.g. a $1\times3\times32\times32$ tensor.
-
-That's because nn.Flatten is batch aware, i.e. it flattens each image in the batch individually.
 
 ## Model Layers
 
-Let's break down the layers in the CIFAR-10 model. To illustrate
-it, we will take a sample minibatch of 5 images of size 32x32 and see
-what happens to it as we pass it through the network.
+Let's step through the layers in the model one by one.
+
+To illustrate it, we will create a sample minibatch of 5 "images" with random
+values of size 32x32 and see what happens to it as we pass it through the network.
 
 ```{python}
 #| code-fold: false
@@ -187,7 +205,7 @@ print(input_image.size())
 We initialize the
 [nn.Flatten](https://pytorch.org/docs/stable/generated/torch.nn.Flatten.html)
 layer to convert each 2D 3x32x32 image into a contiguous array of 3072
-pixel values ( the minibatch dimension (at dim=0) is maintained).
+pixel values (the minibatch dimension (at dim=0) is maintained).
 
 ```{python}
 #| code-fold: false
@@ -203,12 +221,50 @@ layer](https://pytorch.org/docs/stable/generated/torch.nn.Linear.html)
 is a module that applies a linear transformation on the input using its
 stored weights and biases.
 
+Remember from our Tensor discussions that the linear calculation for the linear
+fully connected layer as in the following figure
+
+![Deep Fully Connected Network](assets/images/pytorch/shallow_net.png)
+
+can be expressed as a matrix multiplication.
+
+$$
+\begin{bmatrix}
+w_{00} & w_{01} & w_{02} \\
+w_{10} & w_{11} & w_{12} \\
+w_{20} & w_{21} & w_{22} \\
+w_{30} & w_{31} & w_{32} \\
+\end{bmatrix}
+\begin{bmatrix}
+x_{0} \\
+x_{1} \\
+x_{2} \\
+\end{bmatrix} +
+\begin{bmatrix}
+b_{0} \\
+b_{1} \\
+b_{2} \\
+b_{3} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+h_{0} \\
+h_{1} \\
+h_{2} \\
+h_{3} \\
+\end{bmatrix}
+$$
+
+In the example below the weights matrix is $20\times3072$ and the bias vector is $20\times1$.
+
 ```{python}
 #| collapsed: false
 layer1 = nn.Linear(in_features=3*32*32, out_features=20)
 hidden1 = layer1(flat_image)
 print(hidden1.size())
 ```
+
+We get a 5 batches of 20 values each in a $5\times20$ tensor.
 
 ### nn.ReLU
 
@@ -266,8 +322,9 @@ print(f"After ReLU: {hidden1}")
 
 ### nn.Sequential
 
+Although not technically a layer, 
 [nn.Sequential](https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html)
-is an ordered container of modules. 
+is an ordered container of modules and can be treated as a layer.
 
 The data is passed through all the modules in the same order as defined.
 You can use sequential containers to put together a quick network like
@@ -288,9 +345,15 @@ logits = seq_modules(input_image)
 ### nn.Softmax
 
 The last linear layer of the neural network returns _logits_
-- raw values in $-\infty, \infty$ - which are passed to the
+- raw values in $(-\infty, \infty)$ - which are passed to the
 [nn.Softmax](https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html)
 module. 
+
+The softmax function is defined as
+
+$$
+\mathrm{Softmax}(x_{i}) = \frac{e^{x_i}}{\sum_j e^{x_j}}
+$$
 
 The logits are scaled to values $[0, 1]$ representing the
 model's predicted probabilities for each class. `dim` parameter
@@ -300,6 +363,7 @@ indicates the dimension along which the values must sum to 1.
 #| code-fold: false
 softmax = nn.Softmax(dim=1)
 pred_probab = softmax(logits)
+print(f"Softmax size: {pred_probab.size()}")
 ```
 
 ## Model Parameters
@@ -329,7 +393,140 @@ number of parameters in the model agrees with the summary printed earlier.
 print(f"{512*3072 + 512 + 512*512 + 512 + 512*10 + 10:,}")
 ```
 
+## CIFAR-10 Images
+
+Let's load the CIFAR-10 training data so we can apply our model to it.
+
+```{python}
+import torch
+from torch.utils.data import Dataset
+from torchvision import datasets
+from torchvision.transforms import ToTensor
+import matplotlib.pyplot as plt
+
+training_data = datasets.CIFAR10(
+    root="data",
+    train=True,
+    download=True,
+    transform=ToTensor()
+)
+```
+
+
+We can then select a random sample from the training data and print its shape,
+type, and label.
+
+```{python}
+sample_idx = torch.randint(len(training_data), size=(1,)).item()
+img, label = training_data[sample_idx]
+
+print(f"Sample index: {sample_idx}")
+print(f"Label: {label}")
+print(f"img.shape: {img.shape}")
+print(f"img.dtype: {img.dtype}")
+```
+
+We can then create a `DataLoader` to load the data in batches.
+
+```{python}
+from torch.utils.data import DataLoader
+train_dataloader = DataLoader(training_data, batch_size=5, shuffle=True)
+```
+
+Let's grab one batch of images and labels and print their shapes.
+
+```{python}
+# Display image and label.
+train_features, train_labels = next(iter(train_dataloader))
+print(f"Feature batch shape: {train_features.size()}")
+print(f"Labels batch shape: {train_labels.size()}")
+```
+
+```{python}
+labels_map = {
+    0: "plane",
+    1: "car",
+    2: "bird",
+    3: "cat",
+    4: "deer",
+    5: "dog",
+    6: "frog",
+    7: "horse",
+    8: "ship",
+    9: "truck",
+}
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 5, figsize=(15, 3))
+for i in range(5):
+    img = train_features[i].squeeze() # squeeze() removes dimension of size 1, e.g. (1, 3, 32, 32) -> (3, 32, 32)
+    label = train_labels[i]
+
+    axes[i].imshow(img.permute(1, 2, 0))
+    axes[i].set_title(labels_map[label.item()])
+    axes[i].axis('off')
+
+plt.show()
+
+```
+
+Let's instantiate our model again and move it to the device.
+
+```{python}
+#| code-fold: false
+model = NeuralNetwork().to(device)
+```
+
+We can then pass the batch of images through the model and print the size of the
+logits.
+
+::: {.callout-important}
+Note that we had to move the tensor representing thebatch of images to the device.
+:::
+
+```{python}
+#| code-fold: false
+logits = model(train_features.to(device))
+print(f"Logits size: {logits.size()}")
+```
+
+And finally, we can pass the logits through the softmax function to get the
+predicted probabilities.
+
+```{python}
+#| code-fold: false
+softmax = nn.Softmax(dim=1)
+pred_probab = softmax(logits)
+print(f"Softmax size: {pred_probab.size()}")
+```
+
+
+```{python}
+#| echo: false
+from utils import tensor_to_latex
+from IPython.display import display, Math
+
+latex_logits = tensor_to_latex(logits.T)
+latex_pred_probab = tensor_to_latex(pred_probab.T)
+
+display(Math(f"\\mathrm{{logits}} = {latex_logits}, \\quad \\mathrm{{pred\\_probab}} = {latex_pred_probab}"))
+```
+
+And like before we get the predicted class by choosing the index with the maximum
+probability.
+
+```{python}
+#| code-fold: false
+y_pred = pred_probab.argmax(1)
+print(f"Predicted class: {y_pred}")
+```
+
+And of course we are not getting the right predictions yet because we have not
+trained the model!
+
+Of course, in practice we would use other types of layers, e.g. convolutions,
+dropout, batch normalization, etc., especially for image data.
+
 ## Further Reading
 
 -   [torch.nn API](https://pytorch.org/docs/stable/nn.html)
-
