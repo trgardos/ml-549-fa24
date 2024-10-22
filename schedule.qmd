@@ -217,6 +217,7 @@ title: Schedule
             <ul>
                 <li><a href="https://docs.google.com/presentation/d/1gLtFZAz-Yckkp9FLuY7o4CJH4uO_JBDXcE_iBpxlOTg/edit?usp=sharing">PLC Phase 04: PoC</a> </li>
                 <li><a href="13-pytorch-03-model-def.qmd">PyTorch 03: Model Definition</a> </li>
+            </ul>
         </td>
         <td><b>Assigned:</b>  <br><b>Due:</b> Presentations </td>
     </tr>
