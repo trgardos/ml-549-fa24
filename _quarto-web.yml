@@ -12,8 +12,8 @@ project:
     - 07_scc_cont.qmd
     - 08_scc_batch_computing.qmd
     - 10-pytorch-01.qmd
-    - 11-pytorch-02-dataloaders.qmd
-
+    - 12-pytorch-02-dataloaders.qmd
+    - 13-pytorch-03-model-def.qmd
 execute: 
   freeze: auto
 
@@ -55,8 +55,10 @@ website:
             text: 08 -- SCC Batch Computing
           - href: 10-pytorch-01.qmd
             text: 10 -- PyTorch 01 - Intro and Tensors
-          - href: 11-pytorch-02-dataloaders.qmd
-            text: 11 -- PyTorch 02 - Dataloaders and Transforms
+          - href: 12-pytorch-02-dataloaders.qmd
+            text: 12 -- PyTorch 02 - Dataloaders and Transforms
+          - href: 13-pytorch-03-model-def.qmd
+            text: 13 -- PyTorch 03 - Model Definition
 
 format:
   html:

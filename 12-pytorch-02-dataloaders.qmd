@@ -5,7 +5,7 @@ jupyter: python3
 
 ## Datasets & DataLoaders
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/11-pytorch-02-dataloaders.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/12-pytorch-02-dataloaders.ipynb)
 
 ::: {.callout-note}
 Adapted from [PyTorch Quickstart](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)
