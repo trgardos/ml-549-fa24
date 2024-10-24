@@ -75,6 +75,7 @@ Here's the calculation of $z$ in matrix form:
 import sys
 if 'google.colab' in sys.modules:
     !wget https://raw.githubusercontent.com/trgardos/ml-549-fa24/refs/heads/main/utils.py
+    !pip install torchviz
 
 ```
 
