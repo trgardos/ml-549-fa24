@@ -96,6 +96,8 @@ display(Math(f"\\mathrm{{z}} = \\mathrm{{w}}\\mathrm{{x}}+\\mathrm{{b}} = {latex
 
 The above code defines the following **computational graph**:
 
+::: {.content-visible when-profile="web"}
+
 ```{dot}
 //| label: fig-comp-graph
 //| fig-cap: Computational graph for the simple neural network
@@ -129,6 +131,56 @@ digraph G {
 }
 ```
 
+:::
+
+::: {.content-hidden when-profile="web"}
+Since the above won't render in Colab notebooks, we also render it in
+python.
+
+```{python}
+#| code-fold: true
+import sys
+if 'google.colab' in sys.modules:
+    import graphviz
+    from IPython.display import display
+
+    # Define the graph using Graphviz
+    dot = graphviz.Digraph(comment='Computational Graph')
+
+    # Set graph attributes
+    dot.attr(rankdir='LR')
+
+    # Add nodes
+    dot.node('x', label='x', shape='box')
+    dot.node('matmul1', label='*')
+    dot.node('add1', label='+')
+    dot.node('y', label='y', shape='box')
+    dot.node('w', label='w', shape='box', style='rounded')
+    dot.node('b', label='b', shape='box', style='rounded')
+    dot.node('z', label='z', shape='box')
+    dot.node('loss', label='loss')
+
+    # Add edges
+    dot.edge('x', 'matmul1')
+    dot.edge('w', 'matmul1', rank='same')
+    dot.edge('matmul1', 'add1')
+    dot.edge('b', 'add1', rank='same')
+    dot.edge('add1', 'z')
+    dot.edge('z', 'CE')
+    dot.edge('y', 'CE', rank='same')
+    dot.edge('CE', 'loss')
+
+    # Add subgraph for parameters
+    with dot.subgraph(name='cluster_0') as c:
+        c.attr(label='Parameters', style='dashed')
+        c.node('w')
+        c.node('b')
+
+    # Render the graph
+    display(dot)
+```
+
+:::
 
 In this network, `w` and `b` are **parameters**, which we need to
 optimize. 
