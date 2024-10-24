@@ -72,6 +72,14 @@ Here's the calculation of $z$ in matrix form:
 
 ```{python}
 #| echo: false
+import sys
+if 'google.colab' in sys.modules:
+    !wget https://raw.githubusercontent.com/trgardos/ml-549-fa24/refs/heads/main/utils.py
+
+```
+
+```{python}
+#| echo: false
 from utils import tensor_to_latex
 from IPython.display import display, Math
 
