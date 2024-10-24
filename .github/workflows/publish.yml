@@ -36,7 +36,16 @@ jobs:
         run: |
           echo "Checking Quarto version"
           quarto --version
-          
+
+      - name: Setup GraphViz CLI
+        uses: ts-graphviz/setup-graphviz@v2
+  
+      - name: Check GraphViz dot version
+        shell: sh
+        run: |
+          echo "Checking dot version"
+          dot -V
+
       - name: Install Python and Dependencies
         uses: actions/setup-python@v4
         with:

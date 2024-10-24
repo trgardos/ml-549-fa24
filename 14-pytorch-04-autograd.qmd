@@ -140,7 +140,6 @@ later by using `x.requires_grad_(True)` method.
 By default, new tensors are created with `requires_grad=False`.
 
 ```{python}
-#| collapsed: false
 print(f"x: {x.requires_grad}, y: {y.requires_grad}, w: {w.requires_grad}, b: {b.requires_grad}")
 ```
 
@@ -160,7 +159,6 @@ You can find more information of `Function` in the
 [documentation](https://pytorch.org/docs/stable/autograd.html#function).
 
 ```{python}
-#| collapsed: false
 print(f"Gradient function for loss = {loss.grad_fn}")
 print(f"Gradient function for z = {z.grad_fn}")
 ```
@@ -181,14 +179,13 @@ this case are the parameters `w` and `b`.
 We can retrieve the values from `w.grad` and `b.grad`:
 
 ```{python}
-#| collapsed: false
 loss.backward()
 print(w.grad)
 print(b.grad)
 ```
 
-There's a handy package called `torchviz` that also can render the computational
-graph.
+There's a handy package called [`torchviz`](https://github.com/szagoruyko/pytorchviz)
+that also can render the computational graph.
 
 ```{python}
 from torchviz import make_dot
@@ -228,7 +225,6 @@ We can stop tracking computations by surrounding our computation code with a
 `torch.no_grad()` block:
 
 ```{python}
-#| collapsed: false
 z = torch.matmul(x, w)+b
 print(z.requires_grad)
 
@@ -241,7 +237,6 @@ Another way to achieve the same result is to use the `detach()` method
 on the tensor:
 
 ```{python}
-#| collapsed: false
 z = torch.matmul(x, w)+b
 z_det = z.detach()
 print(z_det.requires_grad)
