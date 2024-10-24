@@ -223,8 +223,19 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Oct 24</td>
-        <td>Lecture description.</td>
-        <td> TBA </td>
+        <td>
+            <ul>
+                <li>14 -- PyTorch 04: Autograd and Backprop</li>
+                <li>15 -- PyTorch 05: Training</li>
+                <li>Lab time</li>
+            </ul>
+        </td>
+        <td> 
+            <ul>
+                <li><a href="14-pytorch-04-autograd.qmd">PyTorch 04: Autograd and Backprop</a> </li>
+                <li><a href="15-pytorch-05-training.qmd">PyTorch 05: Training</a> </li>
+            </ul>
+        </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
         <tr> <!-- ### Week 9 ### -->

@@ -1,0 +1,346 @@
+---
+jupyter: python3
+---
+
+## Introduction
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/15-pytorch-05-training.ipynb)
+
+Based on PyTorch [Optimizing Model Parameters](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html)
+
+
+## Optimizing Model Parameters
+
+Now that we have a model and data it's time to train, validate and test
+our model by optimizing its parameters on our data. 
+
+Training a model is an iterative process -- in each iteration:
+
+* the model makes a guess about the output, 
+* calculates the error in its guess (*loss*), 
+* collects the derivatives of the error with respect to its parameters (as we saw in
+the [previous section](14-pytorch-04-autograd.qmd)), and 
+* **optimizes** these parameters using gradient descent. 
+
+For a more detailed walkthrough of this process, check out this video on
+[backpropagation from 3Blue1Brown](https://www.youtube.com/watch?v=tIeHLnjs5U8).
+
+### Load Data and Define Model
+
+We load the code from the previous sections on [Datasets &
+DataLoaders](12-pytorch-02-dataloaders.qmd) and [Model Definition](13-pytorch-03-model-def.qmd).
+
+We'll use the CIFAR10 dataset again, which consists of 60000 32x32 color images
+in 10 classes, with 6000 images per class.
+
+```{python}
+import torch
+from torch import nn
+from torch.utils.data import DataLoader
+from torchvision import datasets
+from torchvision.transforms import ToTensor
+
+training_data = datasets.CIFAR10(
+    root="data",
+    train=True,
+    download=True,
+    transform=ToTensor()
+)
+
+test_data = datasets.CIFAR10(
+    root="data",
+    train=False,
+    download=True,
+    transform=ToTensor()
+)
+
+train_dataloader = DataLoader(training_data, batch_size=64)
+test_dataloader = DataLoader(test_data, batch_size=64)
+```
+
+Define the model.
+
+```{python}
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(3*32*32, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10),
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+```
+
+Instantiate the model.
+
+```{python}
+model = NeuralNetwork()
+```
+
+
+## Hyperparameters
+
+## Hyperparameters
+
+Hyperparameters are adjustable parameters that let you control the model
+optimization process. 
+
+Different hyperparameter values can impact model training and convergence rates.
+
+Read more about hyperparameter tuning with Raytune [here](https://pytorch.org/tutorials/beginner/hyperparameter_tuning_tutorial.html).
+
+We define the following hyperparameters for training:
+
+- **Number of Epochs** - the number times to iterate over the dataset
+- **Batch Size** - the number of data samples propagated through the network
+  before the parameters are updated
+- **Learning Rate** - how much to update models parameters at each batch/epoch.
+  - Smaller values yield slow learning speed but may get stuck in local minima, 
+  - while large values may result in unpredictable behavior during training by
+    jumping around the solution space.
+
+We'll choose the following values:
+
+```{python}
+learning_rate = 1e-3
+batch_size = 64
+epochs = 5
+```
+
+## Optimization Loop
+
+Once we set our hyperparameters, we can then train and optimize our
+model with an optimization loop. 
+
+Each iteration of the optimization loop is called an **epoch**.
+
+Each epoch consists of two main parts:
+
+-   **The Train Loop** - iterate over the training dataset and try
+    to converge to optimal parameters.
+-   **The Validation/Test Loop** - iterate over the test dataset to
+    check if model performance is improving.
+
+Let's briefly familiarize ourselves with some of the concepts used in
+the training loop. 
+
+### Loss Function
+
+When presented with some training data, our untrained network will not give the
+correct answer. 
+
+**Loss functions** measure the degree of dissimilarity of obtained result to the
+target value, and it is the loss function that we want to minimize during training.
+
+To calculate the loss we make a prediction using the inputs of our given data
+sample and compare it against the true data label value.
+
+Common loss functions include
+
+- [nn.MSELoss](https://pytorch.org/docs/stable/generated/torch.nn.MSELoss.html#torch.nn.MSELoss) (Mean Square Error) for regression tasks, and
+- [nn.NLLLoss](https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss) (Negative Log Likelihood) for classification.
+- [nn.CrossEntropyLoss](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss) combines `nn.LogSoftmax` and `nn.NLLLoss`.
+
+We pass our model's output logits to `nn.CrossEntropyLoss`, which will
+normalize the logits and compute the prediction error.
+
+```{python}
+#| collapsed: false
+# Initialize the loss function
+loss_fn = nn.CrossEntropyLoss()
+```
+
+## Optimizer
+
+Optimization is the process of adjusting model parameters to reduce
+model error in each training step. 
+
+**Optimization algorithms** define how this process is performed (in this
+example we use Stochastic Gradient Descent). 
+
+All optimization logic is encapsulated in the `optimizer` object. 
+
+Here, we use the SGD optimizer.
+
+There are many [different optimizers](https://pytorch.org/docs/stable/optim.html)
+available in PyTorch such as **ADAM** and **RMSProp**, that work better for
+different kinds of models and data.
+
+We initialize the optimizer by registering the model's parameters that
+need to be trained, and passing in the learning rate hyperparameter.
+
+```{python}
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+```
+
+Inside the training loop, optimization happens in three steps:
+
+-   Call `optimizer.zero_grad()` to reset the gradients of model
+    parameters. Gradients by default add up; to prevent
+    double-counting, we explicitly zero them at each iteration.
+-   Backpropagate the prediction loss with a call to
+    `loss.backward()`. PyTorch deposits the gradients of the loss
+    w.r.t. each parameter.
+-   Once we have our gradients, we call `optimizer.step()` to adjust
+    the parameters by the gradients collected in the backward pass.
+
+## Full Implementation
+
+We define:
+
+* `train_loop` that loops over all the data in batches and performs the
+  optimization code, and
+* `test_loop` that evaluates the model's performance against our test data.
+
+```{python}
+def train_loop(dataloader, model, loss_fn, optimizer, device):
+    size = len(dataloader.dataset)
+    # Set the model to training mode - important for batch normalization and
+    # dropout layers. Unnecessary in this situation but added for best practices
+    model.train()
+    for batch, (X, y) in enumerate(dataloader):
+        # Compute prediction and loss
+        pred = model(X.to(device))
+        loss = loss_fn(pred, y.to(device))
+
+        # Backpropagation
+        loss.backward()
+        optimizer.step()
+
+        # BEWARE: We need to zero out the gradients after each iteration because
+        # PyTorch accumulates them by default.
+        optimizer.zero_grad()
+
+        if batch % 100 == 0:
+            loss, current = loss.item(), batch * batch_size + len(X)
+            print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+
+    return loss.cpu().detach().numpy()
+
+
+def test_loop(dataloader, model, loss_fn, device):
+    # Set the model to evaluation mode - important for batch normalization and
+    # dropout layers. Unnecessary in this situation but added for best practices
+    model.eval()
+    size = len(dataloader.dataset)
+    num_batches = len(dataloader)
+    test_loss, correct = 0, 0
+
+    # Evaluating the model with torch.no_grad() ensures that no gradients are
+    # computed during test mode. Also serves to reduce unnecessary gradient
+    # computations and memory usage for tensors with requires_grad=True
+    with torch.no_grad():
+        for X, y in dataloader:
+            pred = model(X.to(device))
+            test_loss += loss_fn(pred, y.to(device)).item()
+            correct += (pred.argmax(1) == y.to(device)).type(torch.float).sum().item()
+
+    test_loss /= num_batches
+    correct /= size
+    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+
+    return test_loss, correct
+```
+
+Feel free to increase the number of epochs to track the model's improving
+performance.
+
+```{python}
+learning_rate = 1e-3
+batch_size = 64
+epochs = 10
+```
+
+We'll also check if there's a GPU available and set the device accordingly.
+
+```{python}
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+print(f"Using {device} device")
+```
+
+We initialize the loss function and optimizer, and pass it to
+`train_loop` and `test_loop` and accumulate train and test losses and test
+accuracy.
+
+```{python}
+import time
+
+# We'll set the random seed for reproducibility of weight initialization
+torch.manual_seed(42)
+
+model = NeuralNetwork().to(device)
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+
+train_losses = []
+test_losses = []
+test_accuracies = []
+
+start_time = time.time()
+
+for t in range(epochs):
+    print(f"Epoch {t+1}\n-------------------------------")
+    train_loss = train_loop(train_dataloader, model, loss_fn, optimizer, device)
+    test_loss, test_accuracy = test_loop(test_dataloader, model, loss_fn, device)
+    
+    train_losses.append(train_loss)
+    test_losses.append(test_loss)
+    test_accuracies.append(test_accuracy)
+
+print(f"Done! Time taken: {time.time() - start_time:.2f} seconds")
+```
+
+Finally, we plot the train and test losses and test accuracy.
+
+```{python}
+import matplotlib.pyplot as plt
+
+# Plotting the results
+epochs_range = range(1, epochs + 1)
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, train_losses, label='Train Loss')
+plt.plot(epochs_range, test_losses, label='Test Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Train and Test Loss')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, test_accuracies, label='Test Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.title('Test Accuracy')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+It's curious that the test loss is lower than the train loss and that the train
+loss stops decreasing around epoch 6.
+
+**Challenge:** Play around with the hyperparameters and see if you can get
+training loss lower than the test loss and continue to decrease.
+
+## Further Reading
+
+- [Loss Functions](https://pytorch.org/docs/stable/nn.html#loss-functions)
+- [torch.optim](https://pytorch.org/docs/stable/optim.html)
+- [Warmstart Training a Model](https://pytorch.org/tutorials/recipes/recipes/warmstarting_model_using_parameters_from_a_different_model.html)
+
