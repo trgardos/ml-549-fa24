@@ -56,7 +56,11 @@ test_data = datasets.CIFAR10(
 
 train_dataloader = DataLoader(training_data, batch_size=64)
 test_dataloader = DataLoader(test_data, batch_size=64)
+```
 
+Define the model.
+
+```{python}
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super().__init__()
@@ -73,7 +77,11 @@ class NeuralNetwork(nn.Module):
         x = self.flatten(x)
         logits = self.linear_relu_stack(x)
         return logits
+```
 
+Instantiate the model.
+
+```{python}
 model = NeuralNetwork()
 ```
 
@@ -188,7 +196,8 @@ Inside the training loop, optimization happens in three steps:
 
 We define:
 
-* `train_loop` that loops over our optimization code, and
+* `train_loop` that loops over all the data in batches and performs the
+  optimization code, and
 * `test_loop` that evaluates the model's performance against our test data.
 
 ```{python}
@@ -205,6 +214,9 @@ def train_loop(dataloader, model, loss_fn, optimizer, device):
         # Backpropagation
         loss.backward()
         optimizer.step()
+
+        # BEWARE: We need to zero out the gradients after each iteration because
+        # PyTorch accumulates them by default.
         optimizer.zero_grad()
 
         if batch % 100 == 0:
@@ -238,9 +250,6 @@ def test_loop(dataloader, model, loss_fn, device):
     return test_loss, correct
 ```
 
-We initialize the loss function and optimizer, and pass it to
-`train_loop` and `test_loop`. 
-
 Feel free to increase the number of epochs to track the model's improving
 performance.
 
@@ -262,6 +271,10 @@ device = (
 )
 print(f"Using {device} device")
 ```
+
+We initialize the loss function and optimizer, and pass it to
+`train_loop` and `test_loop` and accumulate train and test losses and test
+accuracy.
 
 ```{python}
 import time
@@ -291,6 +304,8 @@ for t in range(epochs):
 print(f"Done! Time taken: {time.time() - start_time:.2f} seconds")
 ```
 
+Finally, we plot the train and test losses and test accuracy.
+
 ```{python}
 import matplotlib.pyplot as plt
 
@@ -316,6 +331,12 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+It's curious that the test loss is lower than the train loss and that the train
+loss stops decreasing around epoch 6.
+
+**Challenge:** Play around with the hyperparameters and see if you can get
+training loss lower than the test loss and continue to decrease.
 
 ## Further Reading
 
