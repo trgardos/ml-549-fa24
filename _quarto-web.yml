@@ -15,6 +15,7 @@ project:
     - 12-pytorch-02-dataloaders.qmd
     - 13-pytorch-03-model-def.qmd
     - 14-pytorch-04-autograd.qmd
+    - 15-pytorch-05-training.qmd
 execute: 
   freeze: auto
   # cache: true
@@ -63,6 +64,8 @@ website:
             text: 13 -- PyTorch 03 - Model Definition
           - href: 14-pytorch-04-autograd.qmd
             text: 14 -- PyTorch 04 - Autograd
+          - href: 15-pytorch-05-training.qmd
+            text: 15 -- PyTorch 05 - Training and Evaluation
 
 format:
   html:

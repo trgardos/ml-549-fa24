@@ -1,1 +1,28 @@
 /* css styles */
+
+
+/* Make the stdout output scrollable 
+   This came from https://github.com/quarto-dev/quarto-cli/issues/1057
+
+   Apparently the .cell-output-stdout class is added to the output div
+   by default, so we can just add the following CSS to make it scrollable.
+*/
+.cell-output-stdout {
+    overflow-y: scroll;
+    max-height: 300px;
+}
+
+/* A way to make the cell and its output scrollable.
+   Wrap the cell with 
+   ::: {.scrollable-output}
+   ...
+   :::
+*/
+.scrollable-output {
+    height: 600px;
+    overflow: auto;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+

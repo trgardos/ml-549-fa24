@@ -2,37 +2,27 @@
 jupyter: python3
 ---
 
-```{python}
-#| collapsed: false
-# For tips on running notebooks in Google Colab, see
-# https://pytorch.org/tutorials/beginner/colab
-%matplotlib inline
-```
+## Introduction
 
-[Learn the Basics](intro.html) \|\|
-[Quickstart](quickstart_tutorial.html) \|\|
-[Tensors](tensorqs_tutorial.html) \|\| [Datasets &
-DataLoaders](data_tutorial.html) \|\|
-[Transforms](transforms_tutorial.html) \|\| [Build
-Model](buildmodel_tutorial.html) \|\|
-[Autograd](autogradqs_tutorial.html) \|\| **Optimization** \|\| [Save &
-Load Model](saveloadrun_tutorial.html)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/15-pytorch-05-training.ipynb)
 
-Optimizing Model Parameters
-===========================
+Based on PyTorch [Optimizing Model Parameters](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html)
 
-Now that we have a model and data it\'s time to train, validate and test
-our model by optimizing its parameters on our data. Training a model is
-an iterative process; in each iteration the model makes a guess about
-the output, calculates the error in its guess (*loss*), collects the
+
+## Optimizing Model Parameters
+
+Now that we have a model and data it's time to train, validate and test
+our model by optimizing its parameters on our data. 
+
+Training a model is an iterative process; in each iteration the model makes a
+guess about the output, calculates the error in its guess (*loss*), collects the
 derivatives of the error with respect to its parameters (as we saw in
 the [previous section](autograd_tutorial.html)), and **optimizes** these
 parameters using gradient descent. For a more detailed walkthrough of
 this process, check out this video on [backpropagation from
 3Blue1Brown](https://www.youtube.com/watch?v=tIeHLnjs5U8).
 
-Prerequisite Code
------------------
+### Prerequisite Code
 
 We load the code from the previous sections on [Datasets &
 DataLoaders](data_tutorial.html) and [Build
@@ -83,8 +73,7 @@ class NeuralNetwork(nn.Module):
 model = NeuralNetwork()
 ```
 
-Hyperparameters
-===============
+## Hyperparameters
 
 Hyperparameters are adjustable parameters that let you control the model
 optimization process. Different hyperparameter values can impact model
@@ -110,8 +99,7 @@ batch_size = 64
 epochs = 5
 ```
 
-Optimization Loop
-=================
+## Optimization Loop
 
 Once we set our hyperparameters, we can then train and optimize our
 model with an optimization loop. Each iteration of the optimization loop
@@ -129,8 +117,7 @@ the training loop. Jump ahead to see the
 `full-impl-label`{.interpreted-text role="ref"} of the optimization
 loop.
 
-Loss Function
--------------
+### Loss Function
 
 When presented with some training data, our untrained network is likely
 not to give the correct answer. **Loss function** measures the degree of
@@ -156,8 +143,7 @@ normalize the logits and compute the prediction error.
 loss_fn = nn.CrossEntropyLoss()
 ```
 
-Optimizer
-=========
+## Optimizer
 
 Optimization is the process of adjusting model parameters to reduce
 model error in each training step. **Optimization algorithms** define
@@ -188,8 +174,7 @@ Inside the training loop, optimization happens in three steps:
     -   Once we have our gradients, we call `optimizer.step()` to adjust
         the parameters by the gradients collected in the backward pass.
 
-Full Implementation {#full-impl-label}
-===================
+## Full Implementation
 
 We define `train_loop` that loops over our optimization code, and
 `test_loop` that evaluates the model\'s performance against our test
@@ -242,6 +227,7 @@ We initialize the loss function and optimizer, and pass it to
 `train_loop` and `test_loop`. Feel free to increase the number of epochs
 to track the model\'s improving performance.
 
+
 ```{python}
 #| collapsed: false
 loss_fn = nn.CrossEntropyLoss()
@@ -255,12 +241,9 @@ for t in range(epochs):
 print("Done!")
 ```
 
-Further Reading
-===============
+## Further Reading
 
--   [Loss
-    Functions](https://pytorch.org/docs/stable/nn.html#loss-functions)
--   [torch.optim](https://pytorch.org/docs/stable/optim.html)
--   [Warmstart Training a
-    Model](https://pytorch.org/tutorials/recipes/recipes/warmstarting_model_using_parameters_from_a_different_model.html)
+- [Loss Functions](https://pytorch.org/docs/stable/nn.html#loss-functions)
+- [torch.optim](https://pytorch.org/docs/stable/optim.html)
+- [Warmstart Training a Model](https://pytorch.org/tutorials/recipes/recipes/warmstarting_model_using_parameters_from_a_different_model.html)
 
