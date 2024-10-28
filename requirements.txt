@@ -7,3 +7,5 @@ torchvision
 torchinfo
 torchviz
 graphviz
+langchain
+langchain-openai

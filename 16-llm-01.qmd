@@ -1,0 +1,190 @@
+---
+title: Build a Simple LLM Application
+jupyter: python3
+---
+
+## Overview
+
+We're going to explore a number of practical applications of LLMs.
+
+We'll start with LangChain and build a simple application that translates text from English into another language.
+
+We'll touch briefly on LangChain's logging and tracing features via LangSmith.
+
+And then we'll deploy the application locally with LangServe.
+
+This is adapted from [LangChain's Build a Simple LLM App](https://python.langchain.com/docs/tutorials/llm_chain/)
+and https://github.com/langchain-ai/langchain/blob/master/docs/docs/tutorials/llm_chain.ipynb
+
+More specifically, you'll have a high level LangChain overview of:
+
+- Using [language models](https://python.langchain.com/docs/concepts/chat_models/)
+- Using [PromptTemplates](https://python.langchain.com/docs/concepts/prompt_templates/) 
+  and [OutputParsers](https://python.langchain.com/docs/concepts/output_parsers/)
+- Using [LangChain Expression Language (LCEL)](https://python.langchain.com/docs/concepts/lcel/) to chain components together
+- Debugging and tracing your application using [LangSmith](https://docs.smith.langchain.com/)
+- Deploying your application with [LangServe](https://python.langchain.com/docs/concepts/#langserve)
+
+## Setup
+
+### Installation
+
+To install LangChain run:
+
+::: {.panel-tabset}
+
+## Pip
+
+```bash
+pip install langchain langchain-openai
+```
+
+## Conda
+
+```bash
+conda install langchain langchain-openai -c conda-forge
+```
+
+:::
+
+For more details, see the
+[Installation guide](https://python.langchain.com/docs/how_to/installation/).
+
+## Example Application
+
+We're going to use this 
+[Jupyter notebook](https://github.com/trgardos/ml-549-fa24/blob/main/src/langchain/build-simple-llm-app-with-langchain.ipynb)
+to build the application.
+
+You can clone this repo and run everything locally.
+
+You can also run it in Google Colab, but you'll need to install the dependencies there,
+and run the cell to set the environment variables.
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/16-llm-01.ipynb)
+
+## Serving with LangServe
+
+In the previous section we wrote a script that programmatically invokes our simple chain.
+
+In this section we'll see how to serve the application with LangServe.
+
+LangServe helps developers deploy LangChain chains as a REST API. You do not need
+to use LangServe to use LangChain, but in this guide we'll show how you can deploy
+your app with LangServe.
+
+This part needs to be run in a Python script and executed from the command line.
+
+Install with:
+```bash
+pip install "langserve[all]"
+```
+
+### Server
+
+To create a server for our application we'll make a `serve.py` file. 
+
+This will contain our logic for serving our application. It consists of three things:
+
+1. The definition of our chain that we just built above
+2. A FastAPI app
+3. A definition of a route from which to serve the chain, which is done with `langserve.add_routes`
+
+
+```{.python}
+#!/usr/bin/env python
+from fastapi import FastAPI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_openai import ChatOpenAI
+from langserve import add_routes
+
+# 1. Create prompt template
+system_template = "Translate the following into {language}:"
+prompt_template = ChatPromptTemplate.from_messages([
+    ('system', system_template),
+    ('user', '{text}')
+])
+
+# 2. Create model
+model = ChatOpenAI()
+
+# 3. Create parser
+parser = StrOutputParser()
+
+# 4. Create chain
+chain = prompt_template | model | parser
+
+# 5. App definition
+app = FastAPI(
+  title="LangChain Server",
+  version="1.0",
+  description="A simple API server using LangChain's Runnable interfaces",
+)
+
+# 6. Adding chain route
+add_routes(
+    app,
+    chain,
+    path="/chain",
+)
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="localhost", port=8000)
+```
+
+And that's it! If we execute this file:
+```bash
+python serve.py
+```
+we should see our chain being served at [http://localhost:8000](http://localhost:8000).
+
+### Playground
+
+Every LangServe service comes with a simple
+[built-in UI](https://github.com/langchain-ai/langserve/blob/main/README.md#playground)
+for configuring and invoking the application with streaming output and visibility
+into intermediate steps. 
+
+Head to 
+[http://localhost:8000/chain/playground/](http://localhost:8000/chain/playground/)
+to try it out! 
+
+Pass in the same inputs as before - `{"language": "italian", "text": "hi"}` - and it should respond same as before.
+
+### Client
+
+Now let's set up a client for programmatically interacting with our service. We can easily do this with the [langserve.RemoteRunnable](/docs/langserve/#client).
+Using this, we can interact with the served chain as if it were running client-side.
+
+```python
+from langserve import RemoteRunnable
+
+remote_chain = RemoteRunnable("http://localhost:8000/chain/")
+remote_chain.invoke({"language": "italian", "text": "hi"})
+
+print(type(result))
+print(result)
+```
+
+To learn more about the many other features of LangServe [head here](https://python.langchain.com/docs/langserve/).
+
+## Conclusion
+
+For further reading on the core concepts of LangChain, see [Conceptual Guides](https://python.langchain.com/docs/concepts).
+
+See more detailed guides:
+
+- [LangChain Expression Language (LCEL)](https://python.langchain.com/docs/how_to/#langchain-expression-language-lcel)
+- [Prompt templates](https://python.langchain.com/docs/how_to/#prompt-templates)
+- [Chat models](https://python.langchain.com/docs/how_to/#chat-models)
+- [Output parsers](https://python.langchain.com/docs/how_to/#output-parsers)
+- [LangServe](https://python.langchain.com/docs/langserve/)
+
+And the LangSmith docs:
+
+- [LangSmith](https://docs.smith.langchain.com)
+
+
