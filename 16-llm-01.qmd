@@ -14,7 +14,7 @@ We'll touch briefly on LangChain's logging and tracing features via LangSmith.
 And then we'll deploy the application locally with LangServe.
 
 This is adapted from [LangChain's Build a Simple LLM App](https://python.langchain.com/docs/tutorials/llm_chain/)
-and https://github.com/langchain-ai/langchain/blob/master/docs/docs/tutorials/llm_chain.ipynb
+and [llm_chain.ipynb](https://github.com/langchain-ai/langchain/blob/master/docs/docs/tutorials/llm_chain.ipynb).
 
 More specifically, you'll have a high level LangChain overview of:
 
@@ -61,7 +61,7 @@ You can clone this repo and run everything locally.
 You can also run it in Google Colab, but you'll need to install the dependencies there,
 and run the cell to set the environment variables.
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/16-llm-01.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/src/langchain/build-simple-llm-app-with-langchain.ipynb)
 
 ## Serving with LangServe
 
@@ -91,7 +91,7 @@ This will contain our logic for serving our application. It consists of three th
 3. A definition of a route from which to serve the chain, which is done with `langserve.add_routes`
 
 
-```{.python}
+```{.python filename="serve.py"}
 #!/usr/bin/env python
 from fastapi import FastAPI
 from langchain_core.prompts import ChatPromptTemplate
@@ -159,7 +159,7 @@ Pass in the same inputs as before - `{"language": "italian", "text": "hi"}` - an
 Now let's set up a client for programmatically interacting with our service. We can easily do this with the [langserve.RemoteRunnable](/docs/langserve/#client).
 Using this, we can interact with the served chain as if it were running client-side.
 
-```python
+```{.python filename="client.py"}
 from langserve import RemoteRunnable
 
 remote_chain = RemoteRunnable("http://localhost:8000/chain/")
