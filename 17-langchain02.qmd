@@ -4,7 +4,7 @@ title: "LangChain 02 -- Build a Chatbot with LangChain"
 
 ## Introduction
 
-[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/src/langchain/build-simple-llm-app-with-langchain.ipynb)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/src/langchain/langchain-chatbot.ipynb)
 
 [Previously](16-langchain01.qmd), we:
 
