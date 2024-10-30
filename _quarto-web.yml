@@ -16,7 +16,9 @@ project:
     - 13-pytorch-03-model-def.qmd
     - 14-pytorch-04-autograd.qmd
     - 15-pytorch-05-training.qmd
-    - 16-llm-01.qmd
+    - 16-langchain01.qmd
+    - 17-langchain02.qmd
+
 execute: 
   freeze: auto
   # cache: true
