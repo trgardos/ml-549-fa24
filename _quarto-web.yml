@@ -69,6 +69,8 @@ website:
             text: 15 -- PyTorch 05 - Training and Evaluation
           - href: 16-langchain01.qmd
             text: 16 -- LLM 01 - Building a Simple LLM App with LangChain
+          - href: 17-langchain02.qmd
+            text: 17 -- LLM 02 - Build a simple LLM app with LangChain
 
 format:
   html:

@@ -1,5 +1,5 @@
 ---
-title: "LangChain 02 -- Build a simple LLM app"
+title: "LangChain 02 -- Build a Chatbot with LangChain"
 ---
 
 ## Introduction
