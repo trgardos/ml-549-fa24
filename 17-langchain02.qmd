@@ -1,0 +1,25 @@
+---
+title: "LangChain 02 -- Build a simple LLM app"
+---
+
+## Introduction
+
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/src/langchain/build-simple-llm-app-with-langchain.ipynb)
+
+[Previously](16-langchain01.qmd), we:
+
+- Used a language model
+- Used prompt templates and output parsers
+- Started using LangChain Expression Language (LCEL) to chain components together
+- Logged interactions with LangSmith
+- Wrote a simple client/server application using LangServe
+
+For this example, we'll build a simple chatbot application programmatically.
+
+We'll explore the following features:
+
+- Message persistance using LangGraph
+- Chat thread configuration
+- Prompt templates
+- Trimming conversation history
+- Streaming

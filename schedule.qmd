@@ -249,13 +249,18 @@ title: Schedule
                 <li>Lab time</li>
             </ul>
         </td>
-        <td> <a href="16-llm-01.qmd">LLM 01 - Building a Simple LLM App with LangChain</a> </td>
+        <td> <a href="16-langchain01.qmd">LLM 01 - Building a Simple LLM App with LangChain</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>
         <td>Thu Oct 31</td>
-        <td>Lecture description.</td>
-        <td> TBA </td>
+        <td>
+            <ul>
+                <li>17 -- LLM 02 - Build a simple LLM app with LangChain</li>
+                <li>Lab time</li>
+            </ul>
+        </td>
+        <td> <a href="17-langchain02.qmd">LLM 02 - Build a simple LLM app with LangChain</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 10 ### -->
