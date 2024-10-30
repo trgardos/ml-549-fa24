@@ -1,5 +1,5 @@
 ---
-title: Build a Simple LLM Application
+title: Build a Simple LLM Application with LangChain
 jupyter: python3
 ---
 

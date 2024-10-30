@@ -1,3 +1,8 @@
+# langchain packages
 langchain
+langgraph>0.2.27
 langchain-openai
+
+# other packages
 grandalf
+python-dotenv
