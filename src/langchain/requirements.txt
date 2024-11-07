@@ -2,6 +2,9 @@
 langchain
 langgraph>0.2.27
 langchain-openai
+langchain-chroma
+langchain-community
+langchain-anthropic
 
 # other packages
 grandalf
