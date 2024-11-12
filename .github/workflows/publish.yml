@@ -59,6 +59,8 @@ jobs:
         uses: quarto-dev/quarto-actions/render@v2
         env:
           QUARTO_DENO_V8_OPTIONS: --stack-size=8192
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
