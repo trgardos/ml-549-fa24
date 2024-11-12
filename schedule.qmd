@@ -284,7 +284,7 @@ title: Schedule
     </tr>
     <tr>
         <td>Thu Nov 7</td>
-        <td>Lecture description.</td>
+        <td><b>Lab Day</b> -- Work with your teams on project deployment.</td>
         <td> TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>

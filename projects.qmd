@@ -12,10 +12,10 @@ title: Projects
 __Team__:
 
 
-* Yol-Emma Veillard
-* Wai Yuen Cheng
+* Yol-Emma Veillard (`Vemmay`)
+* Wai Yuen Cheng (`wylliamunlimited`)
 * Mary Choe
-* Lingjie Yuan
+* Lingjie Yuan (`LeslieBTL`)
 
 __Spark Staff__:
 
@@ -30,8 +30,8 @@ __Spark Staff__:
 
 __Team__:
 
-* Jianying Liu
-* Jacob Stein
+* Jianying Liu (`jianyingx12`)
+* Jacob Stein (`jacob-stein1`)
 * Nathaniel Quisel
 
 __Spark Staff__:
@@ -49,10 +49,10 @@ __Spark Staff__:
 
 __Team__:
 
-* Mounika Chowdary Akuraju
+* Mounika Chowdary Akuraju (`mcakuraju5`)
 * Abhaya Shukla
-* Duoduo Xu
-* Akshat Gurbuxani
+* Duoduo Xu (`xud0218`)
+* Akshat Gurbuxani (`akshatgurbuxani`)
 
 __Spark Staff__:
 
@@ -69,10 +69,10 @@ __Spark Staff__:
 
 __Team__:
 
-* Tia Hannah
-* Arjun Chandra
+* Tia Hannah (`tiakorre`)
+* Arjun Chandra (`arjunchandra2`)
 * Heng Chang
-* Devon Solheim
+* Devon Solheim (`solheim6`)
 
 __Spark Staff__:
 
@@ -88,8 +88,8 @@ __Spark Staff__:
 
 __Team__:
 
-* Daniel Foley
-* Enrico Collautti
+* Daniel Foley (`dephoh`)
+* Enrico Collautti (`EnricoCollautti`)
 * Brandon	Vargus
 * Jinanshi Mehta
 
@@ -108,10 +108,10 @@ __Spark Staff__:
 
 __Team__:
 
-* Rohan Anand
-* Matthew Cheng
-* Yewon Lee
-* Abdelazim Lokma
+* Rohan Anand (`rohan-anand21`)
+* Matthew Cheng (`mcheng03`)
+* Yewon Lee (`ywnl`)
+* Abdelazim Lokma (`Abdelazim Lokma`)
 
 __Spark Staff__:
 
