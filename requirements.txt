@@ -9,4 +9,5 @@ torchviz
 graphviz
 langchain
 langchain-openai
+langchain-chroma
 python-dotenv

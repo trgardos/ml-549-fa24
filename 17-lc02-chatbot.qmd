@@ -6,7 +6,7 @@ title: "LangChain 02 -- Build a Chatbot with LangChain"
 
 [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/trgardos/ml-549-fa24/blob/main/src/langchain/02-langchain-chatbot.ipynb)
 
-[Previously](16-langchain01.qmd), we:
+[Previously](16-lc01-simple-llm-app.qmd), we:
 
 - Used a language model
 - Used prompt templates and output parsers

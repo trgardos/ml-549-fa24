@@ -249,7 +249,7 @@ title: Schedule
                 <li>Lab time</li>
             </ul>
         </td>
-        <td> <a href="16-langchain01.qmd">LLM 01 - Building a Simple LLM App with LangChain</a> </td>
+        <td> <a href="16-lc01-simple-llm-app.qmd">LLM 01 - Building a Simple LLM App with LangChain</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>
@@ -260,7 +260,7 @@ title: Schedule
                 <li>Lab time</li>
             </ul>
         </td>
-        <td> <a href="17-langchain02.qmd">LLM 02 - Build a simple LLM app with LangChain</a> </td>
+        <td> <a href="17-lc02-chatbot.qmd">LLM 02 - Build a simple LLM app with LangChain</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr> <!-- ### Week 10 ### -->
@@ -293,8 +293,13 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Nov 12</td>
-        <td>Lecture description.</td>
-        <td>  TBA </td>
+        <td>
+            <ul>
+                <li>18 -- LangChain 03: Embeddings, vector stores and retrievers</li>
+                <li>Lab time</li>
+            </ul>
+        </td>
+        <td> <a href="18-lc03-retrievers.qmd">LangChain 03: Embeddings, vector stores and retrievers</a> </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
     <tr>
