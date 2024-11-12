@@ -9,4 +9,4 @@ torchviz
 graphviz
 langchain
 langchain-openai
-dotenv
+python-dotenv
