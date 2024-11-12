@@ -427,6 +427,117 @@ print(response.content)
 ```
 
 
+## Vector Store from Web Pages
+
+This is a more realistic example, where we fetch content from a set of web pages
+and then create a vector store from them.
+
+> This is a work in progress.
+
+```{python}
+import requests
+from bs4 import BeautifulSoup
+from langchain_core.documents import Document
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
+```
+
+```{python}
+# Step 1: Fetch content from URLs
+urls = [
+    "https://trgardos.github.io/ml-549-fa24/01_command_shells.html",
+    "https://trgardos.github.io/ml-549-fa24/02_python_environments.html",
+    "https://trgardos.github.io/ml-549-fa24/03_git_github.html",
+    "https://trgardos.github.io/ml-549-fa24/04_scc.html",
+    "https://trgardos.github.io/ml-549-fa24/07_scc_cont.html",
+    "https://trgardos.github.io/ml-549-fa24/08_scc_batch_computing.html",
+    "https://trgardos.github.io/ml-549-fa24/10-pytorch-01.html",
+    "https://trgardos.github.io/ml-549-fa24/12-pytorch-02-dataloaders.html",
+    "https://trgardos.github.io/ml-549-fa24/13-pytorch-03-model-def.html",
+    "https://trgardos.github.io/ml-549-fa24/14-pytorch-04-autograd.html",
+    "https://trgardos.github.io/ml-549-fa24/15-pytorch-05-training.html",
+    "https://trgardos.github.io/ml-549-fa24/16-lc01-simple-llm-app.html",
+    "https://trgardos.github.io/ml-549-fa24/17-lc02-chatbot.html",
+    "https://trgardos.github.io/ml-549-fa24/18-lc03-retrievers.html"
+    # Add more URLs as needed
+]
+```
+
+```{python}
+documents = []
+for url in urls:
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    text = soup.get_text()
+    documents.append(Document(page_content=text, metadata={"source": url}))
+```
+
+```{python}
+print(documents)
+# print(documents[0].page_content)
+print(len(documents))
+```
+
+```{python}
+# Step 2: Generate embeddings
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+```
+
+```{python}
+# Step 3: Create a vector store
+vectorstore = Chroma.from_documents(documents, embedding=embeddings)
+```
+
+
+```{python}
+vectorstore.similarity_search_with_score("What is a command shell?", k=8)
+```
+
+```{python}
+vectorstore.similarity_search_with_score("Where can I learn about PyTorch tensors?", k=8)
+```
+
+
+
+## Alternative: Vector Store from Web Pages
+
+> This part is also a work in progress.
+
+
+```{python}
+from langchain_community.document_loaders import WebBaseLoader
+
+loader = WebBaseLoader(urls)
+docs = loader.load()
+```
+
+```{python}
+print(docs)
+print(len(docs))
+```
+
+```{python}
+vectorstore = Chroma.from_documents(docs, embeddings)
+```
+
+```{python}
+vectorstore.similarity_search_with_score("What is a command shell?", k=8)
+```
+
+```{python}
+vectorstore.similarity_search_with_score("Where can I learn about PyTorch tensors?", k=8)
+```
+
+```{python}
+retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
+```
+
+```{python}
+response = rag_chain.invoke("What is a command shell?")
+
+print(response.content)
+```
+
 ## Learn more:
 
 See LangChain's [retrievers](https://python.langchain.com/docs/how_to#retrievers) section of
