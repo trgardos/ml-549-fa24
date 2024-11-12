@@ -19,7 +19,7 @@ project:
     - 16-lc01-simple-llm-app.qmd
     - 17-lc02-chatbot.qmd
     - 18-lc03-retrievers.qmd
-    - 19-lc04-agent.qmd
+    #- 19-lc04-agent.qmd
 execute: 
   freeze: auto
   # cache: true
@@ -82,9 +82,9 @@ website:
           - href: 17-lc02-chatbot.qmd
             text: 17 -- LangChain 02 - Build a Chatbot with LangChain
           - href: 18-lc03-retrievers.qmd
-            text: 18 -- LangChain 03 - Vector Stores and Retrievers
-          - href: 19-lc04-agent.qmd
-            text: 19 -- LangChain 04 - Build an Agent
+            text: 18 -- LangChain 03 - Embeddings, Vector Stores and Retrievers
+          #- href: 19-lc04-agent.qmd
+          #  text: 19 -- LangChain 04 - Build an Agent
 
 format:
   html:
