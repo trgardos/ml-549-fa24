@@ -16,12 +16,20 @@ project:
     - 13-pytorch-03-model-def.qmd
     - 14-pytorch-04-autograd.qmd
     - 15-pytorch-05-training.qmd
-    - 16-langchain01.qmd
-    - 17-langchain02.qmd
-
+    - 16-lc01-simple-llm-app.qmd
+    - 17-lc02-chatbot.qmd
+    - 18-lc03-retrievers.qmd
+    #- 19-lc04-agent.qmd
 execute: 
   freeze: auto
   # cache: true
+
+resources:
+  - src/langchain/requirements.txt
+  - src/langchain/02-langchain-chatbot.ipynb
+  - src/langchain/03-retrievers.ipynb
+  - src/langchain/04-agents.ipynb
+
 
 website:
   title: "CS/DS 549 Spark! Machine Learning Practicum"
@@ -69,10 +77,14 @@ website:
             text: 14 -- PyTorch 04 - Autograd
           - href: 15-pytorch-05-training.qmd
             text: 15 -- PyTorch 05 - Training and Evaluation
-          - href: 16-langchain01.qmd
-            text: 16 -- LLM 01 - Building a Simple LLM App with LangChain
-          - href: 17-langchain02.qmd
-            text: 17 -- LLM 02 - Build a simple LLM app with LangChain
+          - href: 16-lc01-simple-llm-app.qmd
+            text: 16 -- LangChain 01 - Building a Simple LLM App with LangChain
+          - href: 17-lc02-chatbot.qmd
+            text: 17 -- LangChain 02 - Build a Chatbot with LangChain
+          - href: 18-lc03-retrievers.qmd
+            text: 18 -- LangChain 03 - Embeddings, Vector Stores and Retrievers
+          #- href: 19-lc04-agent.qmd
+          #  text: 19 -- LangChain 04 - Build an Agent
 
 format:
   html:
