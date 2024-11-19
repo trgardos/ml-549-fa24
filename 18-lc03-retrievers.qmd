@@ -434,15 +434,13 @@ and then create a vector store from them.
 
 > This is a work in progress.
 
-```{python}
+```{.python}
 import requests
 from bs4 import BeautifulSoup
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-```
 
-```{python}
 # Step 1: Fetch content from URLs
 urls = [
     "https://trgardos.github.io/ml-549-fa24/01_command_shells.html",
@@ -461,9 +459,7 @@ urls = [
     "https://trgardos.github.io/ml-549-fa24/18-lc03-retrievers.html"
     # Add more URLs as needed
 ]
-```
 
-```{python}
 documents = []
 for url in urls:
     response = requests.get(url)
@@ -472,28 +468,28 @@ for url in urls:
     documents.append(Document(page_content=text, metadata={"source": url}))
 ```
 
-```{python}
+```{.python}
 print(documents)
 # print(documents[0].page_content)
 print(len(documents))
 ```
 
-```{python}
+```{.python}
 # Step 2: Generate embeddings
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 ```
 
-```{python}
+```{.python}
 # Step 3: Create a vector store
 vectorstore = Chroma.from_documents(documents, embedding=embeddings)
 ```
 
 
-```{python}
+```{.python}
 vectorstore.similarity_search_with_score("What is a command shell?", k=8)
 ```
 
-```{python}
+```{.python}
 vectorstore.similarity_search_with_score("Where can I learn about PyTorch tensors?", k=8)
 ```
 
@@ -504,35 +500,35 @@ vectorstore.similarity_search_with_score("Where can I learn about PyTorch tensor
 > This part is also a work in progress.
 
 
-```{python}
+```{.python}
 from langchain_community.document_loaders import WebBaseLoader
 
 loader = WebBaseLoader(urls)
 docs = loader.load()
 ```
 
-```{python}
+```{.python}
 print(docs)
 print(len(docs))
 ```
 
-```{python}
+```{.python}
 vectorstore = Chroma.from_documents(docs, embeddings)
 ```
 
-```{python}
+```{.python}
 vectorstore.similarity_search_with_score("What is a command shell?", k=8)
 ```
 
-```{python}
+```{.python}
 vectorstore.similarity_search_with_score("Where can I learn about PyTorch tensors?", k=8)
 ```
 
-```{python}
+```{.python}
 retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 ```
 
-```{python}
+```{.python}
 response = rag_chain.invoke("What is a command shell?")
 
 print(response.content)
