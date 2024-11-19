@@ -203,7 +203,7 @@ we combine the output token in for example (@fig-pooling)
 
 ![](https://substackcdn.com/image/fetch/w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F24494e01-a211-46d4-a3fb-70cc2e0e4dc3_1486x822.png){.lightbox width="60%" #fig-pooling}
 
-See this [blog](https://cameronrwolfe.substack.com?utm_source=navbar&utm_medium=web) for a nice
+See this [blog](https://cameronrwolfe.substack.com/p/the-basics-of-ai-powered-vector-search) for a nice
 overview of vector search.
 
 ## Vector Stores
