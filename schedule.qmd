@@ -328,9 +328,9 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Nov 26</td>
-        <td>Lecture description.</td>
+        <td>Lab Day -- Work with your teams on project deployment and evaluation</td>
         <td>  TBA </td>
-        <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
+        <td><b>Assigned:</b>  <br><b>Due:</b>Beta milestone check-in</td>
     </tr>
     <tr>
         <td>Thu Nov 28</td>
