@@ -341,7 +341,7 @@ title: Schedule
     </tr>
     <tr>
         <td>Tue Dec 3</td>
-        <td>Lecture description.</td>
+        <td>Lab day -- Work with your team on project deployment/evaluation and final presentations.</td>
         <td>  TBA </td>
         <td><b>Assigned:</b>  <br><b>Due:</b>   </td>
     </tr>
